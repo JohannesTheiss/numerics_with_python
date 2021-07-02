@@ -1,6 +1,10 @@
 import numpy as np
-from scipy.interpolate import lagrange, interp1d
-from numpy.polynomial.polynomial import Polynomial
+
+import scipy as sci
+import scipy.interpolate as sciint
+
+import sympy as sp
+
 import matplotlib.pyplot as plt
 import math
 import enum
@@ -144,8 +148,120 @@ def newton(xi, fi, x, debug=True):
     return func, p[0]
 
 def spline_inter(xi, fi):
-    sp = interp1d(xi, fi, kind='cubic')
-    return sp
+    print("######## CUBIC SPLINE ########")
+
+    n = xi.size
+    x = sp.symbols("x")
+    inter = []
+    for i in range(xi.size-1):
+        inter.append((xi[i], xi[i+1]))
+
+    print(f"Interval: {inter}")
+
+    inter_len = len(inter)
+    Si = ["DUMMY_FUNC"]
+    var_vector = []
+    print("Si:")
+    for i in range(inter_len):
+        left_outer = inter[i][0] # the left outer point of the interval
+        a, b, c, d = sp.symbols(f"a{i+1},b{i+1},c{i+1},d{i+1}")
+        si = a + b*(x-left_outer) + c*((x-left_outer)**2) + d*((x-left_outer)**3)
+        Si.append(si)
+        var_vector.extend([a,b,c,d])
+        print(f"s{i+1} = {si}")
+    print()
+
+    Sil = len(Si)
+    SiD1 = ["DUMMY_FUNC"]
+    SiD2 = ["DUMMY_FUNC"]
+    print("derivative:")
+    for i in range(1, Sil):
+        d1 = sp.diff(Si[i], x)
+        d2 = sp.diff(d1, x)
+        SiD1.append(d1)
+        SiD2.append(d2)
+        print(f"s{i}'= {d1} \t\t s{i}'' = {d2}")
+
+    print("\nconditions:")
+    inter_points = xi[1:n-1]
+    ipl = len(inter_points)
+    lgs = []
+    for i in range(ipl):
+        si1d1 = SiD1[i+1].subs(x, inter_points[i])
+        si2d1 = SiD1[i+2].subs(x, inter_points[i])
+        a1 = sp.Eq(si1d1, si2d1)
+
+        si1d2 = SiD2[i+1].subs(x, inter_points[i])
+        si2d2 = SiD2[i+2].subs(x, inter_points[i])
+        a2 = sp.Eq(si1d2, si2d2)
+
+        lgs.extend([a1, a2])
+        sp.pprint(a1)
+        sp.pprint(a2)
+
+
+    for i in range(1, n):
+        sim1 = Si[i].subs(x, xi[i-1])
+        si = Si[i].subs(x, xi[i])
+
+        b1 = sp.Eq(sim1, fi[i-1])
+        b2 = sp.Eq(si, fi[i])
+
+        lgs.extend([b1, b2])
+        sp.pprint(b1)
+        sp.pprint(b2)
+
+    print()
+
+    # natuerlicher spline 
+    print("natuerlicher spline")
+    N_SPLINE = True
+    if N_SPLINE:
+        s1 = SiD2[1].subs(x, xi[0])
+        sn = SiD2[n-1].subs(x, xi[n-1])
+        eq1 = sp.Eq(s1, 0)
+        eq2 = sp.Eq(sn, 0)
+
+        lgs.extend([eq1, eq2])
+        sp.pprint(eq1)
+        sp.pprint(eq2)
+
+
+    if len(lgs) != (4*inter_len):
+        print(f"error: length of the LGS is wrong: {len(lgs)} != {(4*inter_len)}")
+
+
+    # results
+    print("\nRESULTS:")
+
+    solved_lgs = sp.solve(lgs, var_vector)
+    sp.pprint(lgs)
+    sp.pprint(solved_lgs)
+
+
+    sx = []
+    for i in range(1, Sil):
+        # get free_symbols and the value from the solved_lgs
+        fs = list(Si[i].free_symbols)
+        values_by_fs = []
+        for s in fs:
+            values_by_fs.append(solved_lgs.get(s))
+
+        print(fs)
+        print(values_by_fs)
+
+
+        # map free_symbols and solved_lgs values
+        sxi = Si[i]
+        for j in range(len(fs)):
+            if values_by_fs[j] != None:
+                sxi = sxi.subs(fs[j], values_by_fs[j])
+
+        sx.append((sxi, inter[i-1]))
+        sp.pprint(sp.simplify(sxi))
+
+    return sx
+
 
 
 
@@ -162,7 +278,9 @@ SPLINE = True
 # Stuetzstellen
 #xi = np.array([-2, -1, 1, 3])
 #xi = np.array([-2, -0.5, 0.5, 1, 1.5])
-xi = np.array([-1, 0, 1, 2])
+xi = np.array([-1, 0, 1])
+#xi = np.linspace(-1, 1, 3)
+#xi = np.array([0,1,2,3,4])
 
 # Stuetzwerte
 #fi = np.array([8, 0, 2, -12])
@@ -215,12 +333,33 @@ if NEWTON:
         funcs.append(PlotFunc(x, newton_value, name="newton_value"))
 
 if SPLINE:
-    spline = spline_inter(xi, fi)
+    cubic_spline = spline_inter(xi, fi)
 
-    spline_values = np.array(spline(new_X))
+    if cubic_spline != None:
+        # build fx
+        cp_fx = []
+        num_of_point = 500
+        for cp in cubic_spline:
+            inter_start = cp[1][0]
+            inter_end = cp[1][1]
+            cp_xi = np.linspace(inter_start, inter_end, num_of_point)
+            print(cp_xi)
 
-    if spline_values.size != 0:
-        funcs.append(PlotFunc(new_X, spline_values, name="spline_value"))
+            x = sp.symbols("x")
+            cp_solved_func = sp.lambdify(x, cp[0])
+            #cp_fx_xi = cp_solved_func.evalf(subs={x:cp_xi[0]})
+            cp_fx_xi = cp_solved_func(cp_xi)
+            print(cp_fx_xi)
+
+
+            cp_fx.extend(cp_fx_xi)
+
+
+
+        cubic_spline_func = np.array(cp_fx)
+        cubic_new_x_scale = np.linspace(xi[0], xi[xi.size-1], num_of_point*len(cubic_spline))
+        if cubic_spline_func.size != 0:
+            funcs.append(PlotFunc(cubic_new_x_scale, cubic_spline_func, line_type=LINE_TYPE.dashed, name=f"cubic_spline, n={xi.size}"))
 
 
 
