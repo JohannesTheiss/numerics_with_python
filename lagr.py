@@ -343,14 +343,10 @@ if SPLINE:
             inter_start = cp[1][0]
             inter_end = cp[1][1]
             cp_xi = np.linspace(inter_start, inter_end, num_of_point)
-            print(cp_xi)
 
             x = sp.symbols("x")
             cp_solved_func = sp.lambdify(x, cp[0])
-            #cp_fx_xi = cp_solved_func.evalf(subs={x:cp_xi[0]})
             cp_fx_xi = cp_solved_func(cp_xi)
-            print(cp_fx_xi)
-
 
             cp_fx.extend(cp_fx_xi)
 
