@@ -1,7 +1,7 @@
 import numpy as np
 import sympy as sp
 
-############# INPUT ############# 
+############ INPUT ############# 
 # define your vars like:
 # x, y, z = sp.symbols("x,y,z")
 x = sp.symbols("x")
