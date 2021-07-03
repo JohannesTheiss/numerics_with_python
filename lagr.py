@@ -147,7 +147,14 @@ def newton(xi, fi, x, debug=True):
     print(f"P 0,{n-1} = p({x}) = {p[0]}")
     return func, p[0]
 
-def spline_inter(xi, fi):
+
+class SPLINE_TYPE(enum.Enum):
+     natural = 0
+     complete = 1
+     periodic = 2
+
+
+def cubic_spline(xi, fi, spline_type, func=None):
     print("######## CUBIC SPLINE ########")
 
     n = xi.size
@@ -213,10 +220,9 @@ def spline_inter(xi, fi):
 
     print()
 
-    # natuerlicher spline 
-    print("natuerlicher spline")
-    N_SPLINE = True
-    if N_SPLINE:
+    if spline_type == SPLINE_TYPE.natural:
+        # natuerlicher spline
+        print("natural spline")
         s1 = SiD2[1].subs(x, xi[0])
         sn = SiD2[n-1].subs(x, xi[n-1])
         eq1 = sp.Eq(s1, 0)
@@ -225,6 +231,11 @@ def spline_inter(xi, fi):
         lgs.extend([eq1, eq2])
         sp.pprint(eq1)
         sp.pprint(eq2)
+
+    elif spline_type == SPLINE_TYPE.complete:
+        # vollstaendiger spline 
+        pass
+
 
 
     if len(lgs) != (4*inter_len):
@@ -247,10 +258,6 @@ def spline_inter(xi, fi):
         for s in fs:
             values_by_fs.append(solved_lgs.get(s))
 
-        print(fs)
-        print(values_by_fs)
-
-
         # map free_symbols and solved_lgs values
         sxi = Si[i]
         for j in range(len(fs)):
@@ -272,6 +279,7 @@ LAGRAGE = False
 NEVILLE = False
 NEWTON = False
 SPLINE = True
+spline_type = SPLINE_TYPE.natural
 
 
 ################### INPUTS ################### 
@@ -333,13 +341,13 @@ if NEWTON:
         funcs.append(PlotFunc(x, newton_value, name="newton_value"))
 
 if SPLINE:
-    cubic_spline = spline_inter(xi, fi)
+    cspline = cubic_spline(xi, fi, spline_type, f)
 
-    if cubic_spline != None:
+    if cspline != None:
         # build fx
         cp_fx = []
         num_of_point = 500
-        for cp in cubic_spline:
+        for cp in cspline:
             inter_start = cp[1][0]
             inter_end = cp[1][1]
             cp_xi = np.linspace(inter_start, inter_end, num_of_point)
@@ -353,9 +361,9 @@ if SPLINE:
 
 
         cubic_spline_func = np.array(cp_fx)
-        cubic_new_x_scale = np.linspace(xi[0], xi[xi.size-1], num_of_point*len(cubic_spline))
+        cubic_new_x_scale = np.linspace(xi[0], xi[xi.size-1], num_of_point*len(cspline))
         if cubic_spline_func.size != 0:
-            funcs.append(PlotFunc(cubic_new_x_scale, cubic_spline_func, line_type=LINE_TYPE.dashed, name=f"cubic_spline, n={xi.size}"))
+            funcs.append(PlotFunc(cubic_new_x_scale, cubic_spline_func, line_type=LINE_TYPE.dashed, name=f"cubic_spline({spline_type}), n={xi.size}"))
 
 
 
