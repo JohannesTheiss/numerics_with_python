@@ -90,18 +90,20 @@ def cubic_spline(xi, fi, spline_type, func=None):
         pass
 
 
-
     if len(lgs) != (4*inter_len):
         print(f"error: length of the LGS is wrong: {len(lgs)} != {(4*inter_len)}")
-
 
     # results
     print("\nRESULTS:")
 
     solved_lgs = sp.solve(lgs, var_vector)
-    sp.pprint(lgs)
-    sp.pprint(solved_lgs)
+    # print lgs
+    print("LGS:")
+    for g in lgs:
+        sp.pprint(g)
 
+    print("\nsolved LGS:")
+    sp.pprint(solved_lgs)
 
     sx = []
     for i in range(1, Sil):
@@ -118,7 +120,11 @@ def cubic_spline(xi, fi, spline_type, func=None):
                 sxi = sxi.subs(fs[j], values_by_fs[j])
 
         sx.append((sxi, inter[i-1]))
+
+        # print solved si
+        print(f"\nS{i}: interval: {inter[i-1]}")
         sp.pprint(sp.simplify(sxi))
 
+    ## return all si (functions)
     return sx
 

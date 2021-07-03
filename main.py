@@ -125,9 +125,5 @@ if SPLINE:
 
 
 ################### PLOTTING ################### 
-
-
 pf.plot_funcs(funcs)
-
-
 
