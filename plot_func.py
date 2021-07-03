@@ -37,13 +37,17 @@ def plot_funcs(functions):
             lt = 'o:'
 
         # if color == "red" than use "r"
-        if len(color) > 1: color = color[0]
+#        if len(color) > 1: color = color[0]
 
-        fmt = f"{lt}{color}"
+#        fmt = f"{lt}{color}"
+        fmt = f"{lt}"
         lbl = name if name != "" else f"line{i}"
 
         #plt.plot(x_values, y_values, marker='o', label=f"line{i}")
-        plt.plot(x_values, y_values, fmt, label=lbl)
+        if len(color) > 1:
+            plt.plot(x_values, y_values, fmt, label=lbl, color=color)
+        else:
+            plt.plot(x_values, y_values, fmt, label=lbl)
 
         i += 1
 

@@ -44,7 +44,7 @@ X = np.array([2])
 x = X[0]
 
 # functions to plot
-funcs = [pf.PlotFunc(xi, fi, pf.LINE_TYPE.line, color="r", name="input_func")]
+funcs = [pf.PlotFunc(xi, fi, pf.LINE_TYPE.line, color="red", name="input_func")]
 
 xi_max = math.ceil(xi.max())
 xi_min = math.ceil(xi.min())
@@ -81,7 +81,7 @@ if NEWTON:
     newton_y = npoly_func(new_X)
 
     if newton_poly != None:
-        funcs.append(pf.PlotFunc(new_X, newton_y, name="newton_poly"))
+        funcs.append(pf.PlotFunc(new_X, newton_y, name="newton_poly", color="green"))
     if newton_value != None:
         funcs.append(pf.PlotFunc(x, newton_value, name="newton_value"))
 
@@ -108,7 +108,7 @@ if SPLINE:
         cubic_spline_func = np.array(cp_fx)
         cubic_new_x_scale = np.linspace(xi[0], xi[xi.size-1], num_of_point*len(cspline))
         if cubic_spline_func.size != 0:
-            funcs.append(pf.PlotFunc(cubic_new_x_scale, cubic_spline_func, line_type=pf.LINE_TYPE.dashed, name=f"cubic_spline({spline_type}), n={xi.size}"))
+            funcs.append(pf.PlotFunc(cubic_new_x_scale, cubic_spline_func, line_type=pf.LINE_TYPE.dashed, color="blue" ,name=f"cubic_spline({spline_type}), n={xi.size}"))
 
 
 
