@@ -4,6 +4,7 @@ from scipy.interpolate import lagrange
 from numpy.polynomial.polynomial import Polynomial
 
 def lagr(xi, fi, X=np.array([]), debug=True, prec=4):
+    print("LAGRANGE:")
     poly = lagrange(xi, fi)
     coef = Polynomial(poly).coef
     res = None

@@ -74,10 +74,13 @@ if NEVILLE:
 # NEWTON call
 if NEWTON:
     newton_value = None
-    horner_schema, newton_value = newt.newton(xi, fi, x)
-    newton_y = horner_schema(new_X)
+    newton_poly, newton_value = newt.newton(xi, fi, x)
 
-    if horner_schema != None:
+    var_x = sp.symbols("x")
+    npoly_func = sp.lambdify(var_x, newton_poly)
+    newton_y = npoly_func(new_X)
+
+    if newton_poly != None:
         funcs.append(pf.PlotFunc(new_X, newton_y, name="newton_poly"))
     if newton_value != None:
         funcs.append(pf.PlotFunc(x, newton_value, name="newton_value"))

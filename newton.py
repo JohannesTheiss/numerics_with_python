@@ -1,7 +1,10 @@
 import numpy as np
 import math
 
-def newton(xi, fi, x, debug=True):
+import sympy as sp
+from sympy.parsing.sympy_parser import parse_expr
+
+def newton(xi, fi, x=None, debug=True):
     print("NEWTON:")
     if xi.size != fi.size:
         print("xi and yi must have same first dimension")
@@ -22,32 +25,30 @@ def newton(xi, fi, x, debug=True):
             # update the value in the array
             p[j] = pjk
 
-        print()
         coefs.append(p[0])
 
-
-    print(coefs)
     coefs_number = len(coefs)
-    px = coefs[coefs_number-1]
-    px_poly = ["("*(math.ceil(coefs_number-1)) ,f"({px})"]
+    var_x = sp.symbols("x")
+    newton_poly = coefs[coefs_number-1]
     for i in range(coefs_number-2, -1, -1):
-        px_poly.append(f"*(x-({xi[i]}))+({coefs[i]}))")
-        px *= (x - xi[i])
-        px += coefs[i]
+        newton_poly *= (var_x - xi[i])
+        newton_poly += coefs[i]
 
-    print(px)
-    px_str = "".join(px_poly)
-    print(px_str)
+    px = None
+    if x != None:
+        px = newton_poly.subs(var_x, x)
 
-    # das ist nicht gesund...
-    func = lambda x : eval(px_str) # ACHTUNG ACHTUNG BITTE HELFEN SIE MIR
+    # prints
+    print(f"coefs: {coefs}")
+    print(f"p({x}) = {px}")
+    print("newton poly:")
+    sp.pprint(newton_poly)
 
-    print(f"P 0,{n-1} = p({x}) = {p[0]}")
-    return func, p[0]
+    return newton_poly, px
+
 
 
 # example call
 #print(newton(np.array([1,2,3]), np.array([3,4,5]), 2))
-
-
+#print(newton(np.array([-2,-0.5,0.5,1,1.5]), np.array([-4,0.5,3.5,5,6.5]), 2))
 
