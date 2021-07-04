@@ -1,3 +1,4 @@
+import numpy as np
 import sympy as sp
 import enum
 
@@ -7,7 +8,14 @@ class SPLINE_TYPE(enum.Enum):
      periodic = 2
 
 
-def cubic_spline(xi, fi, spline_type, fd1=None):
+def append_equations(lgs, eqs, PRINT=True):
+    for lhs, rhs in eqs:
+        eq = sp.Eq(lhs, rhs)
+        lgs.append(eq)
+        if PRINT:
+            sp.pprint(eq)
+
+def cubic_spline(xi, fi, spline_type, f=None, fd1=None):
     print("######## CUBIC SPLINE ########")
 
     n = xi.size
@@ -41,10 +49,10 @@ def cubic_spline(xi, fi, spline_type, fd1=None):
         d2 = sp.diff(d1, x)
         SiD1.append(d1)
         SiD2.append(d2)
-        print(f"\ns{i+1}'(x)")
+        print(f"\ns{i}'(x)")
         #print(f"s{i}'= {d1} \t\t s{i}'' = {d2}")
         sp.pprint(d1)
-        print(f"\ns{i+1}''(x)")
+        print(f"\ns{i}''(x)")
         sp.pprint(d2)
 
     print("\nconditions:")
@@ -83,12 +91,8 @@ def cubic_spline(xi, fi, spline_type, fd1=None):
         print("natural spline")
         s1 = SiD2[1].subs(x, xi[0])
         sn = SiD2[n-1].subs(x, xi[n-1])
-        eq1 = sp.Eq(s1, 0)
-        eq2 = sp.Eq(sn, 0)
 
-        lgs.extend([eq1, eq2])
-        sp.pprint(eq1)
-        sp.pprint(eq2)
+        append_equations(lgs, [(s1, 0), (sn, 0)])
 
     elif spline_type == SPLINE_TYPE.complete:
         # vollstaendiger spline 
@@ -98,7 +102,7 @@ def cubic_spline(xi, fi, spline_type, fd1=None):
             return None
 
         s1d1x0 = SiD1[1].subs(x, xi[0])
-        snd1xn = SiD2[n-1].subs(x, xi[n-1])
+        snd1xn = SiD1[n-1].subs(x, xi[n-1])
 
         # fd1 = sp.diff(func, x)
         #fd1x0 = fd1.subs(x, xi[0])
@@ -110,14 +114,25 @@ def cubic_spline(xi, fi, spline_type, fd1=None):
         fd1x0 = fd1(xi[0])
         fd1xn = fd1(xi[n-1])
 
-        eq1 = sp.Eq(s1d1x0, fd1x0)
-        eq2 = sp.Eq(snd1xn, fd1xn)
+        append_equations(lgs, [(s1d1x0, fd1x0), (snd1xn, fd1xn)])
 
-        lgs.extend([eq1, eq2])
-        sp.pprint(eq1)
-        sp.pprint(eq2)
+    elif spline_type == SPLINE_TYPE.periodic:
+        print("periodic spline")
+        if f == None:
+            print(f"ERROR: cubic_spline.py no func given")
+            return None
+        # check if periodic spline is possible
+        if np.round(f(xi[0]), 6) != np.round(f(xi[n-1]), 6):
+            print(f"ERROR: cubic_spline.py periodic spline is not possible f(x0) != f(xn)")
+            return None
 
+        s1d1x0 = SiD1[1].subs(x, xi[0])
+        snd1xn = SiD1[n-1].subs(x, xi[n-1])
 
+        s1d2x0 = SiD2[1].subs(x, xi[0])
+        snd2xn = SiD2[n-1].subs(x, xi[n-1])
+
+        append_equations(lgs, [(s1d1x0, snd1xn), (s1d2x0, snd2xn)])
 
 
     if len(lgs) != (4*inter_len):

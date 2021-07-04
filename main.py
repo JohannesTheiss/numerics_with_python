@@ -17,7 +17,8 @@ LAGRAGE = False
 NEVILLE = False
 NEWTON = False
 SPLINE = True
-spline_types = [cubsp.SPLINE_TYPE.natural, cubsp.SPLINE_TYPE.complete]
+spline_types = [cubsp.SPLINE_TYPE.natural, \
+                cubsp.SPLINE_TYPE.complete, cubsp.SPLINE_TYPE.periodic]
 
 # numpy array data type: float64
 dt = np.dtype('f8')
@@ -106,7 +107,7 @@ if SPLINE:
     spline_colors = ["blue", "cyan", "teal", "lightcyan"]
     for i in range(len(spline_types)):
         spline_type = spline_types[i]
-        cspline = cubsp.cubic_spline(xi, fi, spline_type, fd1)
+        cspline = cubsp.cubic_spline(xi, fi, spline_type, f, fd1)
 
         if cspline != None:
             # build fx
