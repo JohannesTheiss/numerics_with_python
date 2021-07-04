@@ -1,8 +1,9 @@
-# numerics_with_python
+# Numerics with Python
 numerics with python i guess xD
 
-
-### like
+### cool Graph
+![cool-figure](https://raw.githubusercontent.com/JohannesTheiss/numerics_with_python/main/screenshots/Figure_2.png)
+---
 ![cool-figure](https://raw.githubusercontent.com/JohannesTheiss/numerics_with_python/main/screenshots/Figure_1.png)
 
 

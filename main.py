@@ -47,6 +47,15 @@ f = lambda x : abs(x)       # f(x) = |x|
 fd1 = lambda x : x/abs(x)   # f'(x) = x/|x|
 lf4 = f(lx4) # Stuetzwerte
 
+#lx4 = np.array([-18, -16, -10, -5, -1, 0, 1, 4, 8, 12, 16], dtype=dt)
+#lx4 = np.linspace(-10, 10, 20, dtype=dt)
+#f = lambda x : (((x**3)+4)/math.pi)*(x**2)
+#fd1 = lambda x : (5*(x**4)+(8*x))/math.pi
+#f = lambda x : x**3
+#fd1 = lambda x : 2*x**2
+#lf4 = f(lx4) # Stuetzwerte
+
+
 # TODO build symolic function
 #func_x = sp.symbols("x")
 #sym_func = sp.Abs(func_x) # f(x) = |x|
@@ -99,12 +108,12 @@ if NEWTON:
     newton_y = npoly_func(new_X)
 
     if newton_poly != None:
-        funcs.append(pf.PlotFunc(new_X, newton_y, name="newton_poly", color="green"))
+        funcs.append(pf.PlotFunc(new_X, newton_y, name="newton_poly", color="cyan"))
     if newton_value != None:
         funcs.append(pf.PlotFunc(x, newton_value, name="newton_value"))
 
 if SPLINE:
-    spline_colors = ["blue", "cyan", "teal", "lightcyan"]
+    spline_colors = ["orange", "violet", "lime","mediumspringgreen"]
     for i in range(len(spline_types)):
         spline_type = spline_types[i]
         cspline = cubsp.cubic_spline(xi, fi, spline_type, f, fd1)
