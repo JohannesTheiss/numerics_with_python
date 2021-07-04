@@ -19,24 +19,38 @@ import cubic_spline as cubsp
 ################## SETTINGS ################### 
 LAGRAGE = False
 NEVILLE = False
-NEWTON = False
+NEWTON = True
 SPLINE = True
 spline_type = cubsp.SPLINE_TYPE.natural
+
+dt = np.dtype('f8')
 
 
 ################### INPUTS ################### 
 # Stuetzstellen
-#xi = np.array([-2, -1, 1, 3])
-#xi = np.array([-2, -0.5, 0.5, 1, 1.5])
-xi = np.array([-1, 0, 1])
-#xi = np.linspace(-1, 1, 3)
-#xi = np.array([0,1,2,3,4])
+# list of x values
+lx1 = [-2, -1, 1, 3]
+lx2 = [-2, -1, 1, 3]
+lx3 = [-2, -1, 1, 3]
+lx4 = [-2, -1, 0, 1, 3]
+lx4 = [-2, -1, 1, 3, 0]
+lx4 = [-2, -0.5, 0.5, 1, 1.5]
+lx4 = [-1, 0, 1]
+
+#xi = np.linspace(-1, 1, 3, dtype=dt)
+xi = np.array(lx1, dtype=dt)
 
 # Stuetzwerte
-#fi = np.array([8, 0, 2, -12])
-#fi = np.array([-4, 0.5, 3.5, 5, 6.5])
+# list of f(x) values
+ly1 = [8, 0, 2, -12]
+ly2 = [7, 0, 1, 2, -12]
+ly3 = [8, 0, 2, -12, 1]
+ly4 = [-4, 0.5, 3.5, 5, 6.5]
+
+# define own function
 f = lambda x : abs(x)
-fi = np.array(f(xi))
+lf1 = f(xi)
+fi = np.array(ly1, dtype=dt)
 
 # Auswertungspunkte
 #X = np.arange(-10, 10)
@@ -102,8 +116,6 @@ if SPLINE:
             cp_fx_xi = cp_solved_func(cp_xi)
 
             cp_fx.extend(cp_fx_xi)
-
-
 
         cubic_spline_func = np.array(cp_fx)
         cubic_new_x_scale = np.linspace(xi[0], xi[xi.size-1], num_of_point*len(cspline))
