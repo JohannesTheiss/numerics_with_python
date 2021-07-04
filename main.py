@@ -13,9 +13,9 @@ import cubic_spline as cubsp
 
 
 ################## SETTINGS ################### 
-LAGRAGE = False
-NEVILLE = False
-NEWTON = False
+LAGRAGE = True
+NEVILLE = True
+NEWTON = True
 SPLINE = True
 spline_types = [cubsp.SPLINE_TYPE.natural, \
                 cubsp.SPLINE_TYPE.complete, cubsp.SPLINE_TYPE.periodic]
@@ -88,7 +88,8 @@ if LAGRAGE:
     if lagr_Y.size != 0:
         funcs.append(pf.PlotFunc(new_X, lagr_Y, name="lagrange_poly"))
     if lagr_values != None:
-        funcs.append(pf.PlotFunc(X, lagr_values, name="lagrange_values"))
+        #funcs.append(pf.PlotFunc(X, lagr_values, name="lagrange_values"))
+        pass
 
 # NEVILLE call
 if NEVILLE:
@@ -96,7 +97,8 @@ if NEVILLE:
     neville_value = nevi.neville(xi, fi, x)
 
     if neville_value != None:
-        funcs.append(pf.PlotFunc(x, neville_value, name="neville_value"))
+        #funcs.append(pf.PlotFunc(x, neville_value, name="neville_value"))
+        pass
 
 # NEWTON call
 if NEWTON:
@@ -110,7 +112,8 @@ if NEWTON:
     if newton_poly != None:
         funcs.append(pf.PlotFunc(new_X, newton_y, name="newton_poly", color="cyan"))
     if newton_value != None:
-        funcs.append(pf.PlotFunc(x, newton_value, name="newton_value"))
+        #funcs.append(pf.PlotFunc(x, newton_value, name="newton_value"))
+        pass
 
 if SPLINE:
     spline_colors = ["orange", "violet", "lime","mediumspringgreen"]
