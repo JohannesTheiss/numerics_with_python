@@ -7,7 +7,7 @@ class SPLINE_TYPE(enum.Enum):
      periodic = 2
 
 
-def cubic_spline(xi, fi, spline_type, func=None):
+def cubic_spline(xi, fi, spline_type, fd1=None):
     print("######## CUBIC SPLINE ########")
 
     n = xi.size
@@ -92,7 +92,32 @@ def cubic_spline(xi, fi, spline_type, func=None):
 
     elif spline_type == SPLINE_TYPE.complete:
         # vollstaendiger spline 
-        pass
+        print("complete spline")
+        if fd1 == None:
+            print(f"ERROR: cubic_spline.py no func given")
+            return None
+
+        s1d1x0 = SiD1[1].subs(x, xi[0])
+        snd1xn = SiD2[n-1].subs(x, xi[n-1])
+
+        # fd1 = sp.diff(func, x)
+        #fd1x0 = fd1.subs(x, xi[0])
+        #fd1xn = fd1.subs(x, xi[n-1])
+        #sp.pprint(fd1)
+        #sp.pprint(fd1x0)
+        #sp.pprint(fd1xn)
+
+        fd1x0 = fd1(xi[0])
+        fd1xn = fd1(xi[n-1])
+
+        eq1 = sp.Eq(s1d1x0, fd1x0)
+        eq2 = sp.Eq(snd1xn, fd1xn)
+
+        lgs.extend([eq1, eq2])
+        sp.pprint(eq1)
+        sp.pprint(eq2)
+
+
 
 
     if len(lgs) != (4*inter_len):

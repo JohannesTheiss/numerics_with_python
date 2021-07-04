@@ -17,7 +17,7 @@ LAGRAGE = False
 NEVILLE = False
 NEWTON = False
 SPLINE = True
-spline_type = cubsp.SPLINE_TYPE.natural
+spline_types = [cubsp.SPLINE_TYPE.natural, cubsp.SPLINE_TYPE.complete]
 
 # numpy array data type: float64
 dt = np.dtype('f8')
@@ -40,9 +40,19 @@ lx3 = [-2, -0.5, 0.5, 1, 1.5]
 lf3 = [-4,  0.5, 3.5, 5, 6.5]
 
 # if you want to define your own function
+# define x values
 lx4 = np.array([-1, 0, 1], dtype=dt)
-f = lambda x : abs(x) # f(x) = |x|
+f = lambda x : abs(x)       # f(x) = |x|
+fd1 = lambda x : x/abs(x)   # f'(x) = x/|x|
 lf4 = f(lx4) # Stuetzwerte
+
+# TODO build symolic function
+#func_x = sp.symbols("x")
+#sym_func = sp.Abs(func_x) # f(x) = |x|
+#f = lambda x : abs(x) # f(x) = |x|
+# convert the symolic function to a lambda
+#lam_func = sp.lambdify(func_x, sym_func, "numpy")
+#lf4 = lam_func(lx4) # Stuetzwerte
 
 
 #xi = np.linspace(-1, 1, 3, dtype=dt)
@@ -93,27 +103,35 @@ if NEWTON:
         funcs.append(pf.PlotFunc(x, newton_value, name="newton_value"))
 
 if SPLINE:
-    cspline = cubsp.cubic_spline(xi, fi, spline_type)
+    spline_colors = ["blue", "cyan", "teal", "lightcyan"]
+    for i in range(len(spline_types)):
+        spline_type = spline_types[i]
+        cspline = cubsp.cubic_spline(xi, fi, spline_type, fd1)
 
-    if cspline != None:
-        # build fx
-        cp_fx = []
-        num_of_point = 500
-        for cp in cspline:
-            inter_start = cp[1][0]
-            inter_end = cp[1][1]
-            cp_xi = np.linspace(inter_start, inter_end, num_of_point)
+        if cspline != None:
+            # build fx
+            cp_fx = []
+            num_of_point = 500
+            for cp in cspline:
+                inter_start = cp[1][0]
+                inter_end = cp[1][1]
+                cp_xi = np.linspace(inter_start, inter_end, num_of_point)
 
-            x = sp.symbols("x")
-            cp_solved_func = sp.lambdify(x, cp[0])
-            cp_fx_xi = cp_solved_func(cp_xi)
+                x = sp.symbols("x")
+                cp_solved_func = sp.lambdify(x, cp[0])
+                cp_fx_xi = cp_solved_func(cp_xi)
 
-            cp_fx.extend(cp_fx_xi)
+                cp_fx.extend(cp_fx_xi)
 
-        cubic_spline_func = np.array(cp_fx)
-        cubic_new_x_scale = np.linspace(xi[0], xi[xi.size-1], num_of_point*len(cspline))
-        if cubic_spline_func.size != 0:
-            funcs.append(pf.PlotFunc(cubic_new_x_scale, cubic_spline_func, line_type=pf.LINE_TYPE.dashed, color="blue" ,name=f"cubic_spline({spline_type}), n={xi.size}"))
+                fs = cp[0].free_symbols
+                if len(fs) > 1:
+                    print(f"ERROR: The si got more the one variable, {fs}")
+                    exit()
+
+            cubic_spline_func = np.array(cp_fx)
+            cubic_new_x_scale = np.linspace(xi[0], xi[xi.size-1], num_of_point*len(cspline))
+            if cubic_spline_func.size != 0:
+                funcs.append(pf.PlotFunc(cubic_new_x_scale, cubic_spline_func, line_type=pf.LINE_TYPE.dashed, color=spline_colors[i] ,name=f"cubic_spline({spline_type}), n={xi.size}"))
 
 
 
