@@ -28,7 +28,8 @@ def cubic_spline(xi, fi, spline_type, func=None):
         si = a + b*(x-left_outer) + c*((x-left_outer)**2) + d*((x-left_outer)**3)
         Si.append(si)
         var_vector.extend([a,b,c,d])
-        print(f"s{i+1} = {si}")
+        print(f"\ns{i+1}(x):")
+        sp.pprint(si)
     print()
 
     Sil = len(Si)
@@ -40,7 +41,11 @@ def cubic_spline(xi, fi, spline_type, func=None):
         d2 = sp.diff(d1, x)
         SiD1.append(d1)
         SiD2.append(d2)
-        print(f"s{i}'= {d1} \t\t s{i}'' = {d2}")
+        print(f"\ns{i+1}'(x)")
+        #print(f"s{i}'= {d1} \t\t s{i}'' = {d2}")
+        sp.pprint(d1)
+        print(f"\ns{i+1}''(x)")
+        sp.pprint(d2)
 
     print("\nconditions:")
     inter_points = xi[1:n-1]

@@ -17,26 +17,26 @@ import cubic_spline as cubsp
 
 
 ################## SETTINGS ################### 
-LAGRAGE = True
-NEVILLE = True
-NEWTON = True
+LAGRAGE = False
+NEVILLE = False
+NEWTON = False
 SPLINE = True
 spline_type = cubsp.SPLINE_TYPE.natural
 
 
 ################### INPUTS ################### 
 # Stuetzstellen
-xi = np.array([-2, -1, 1, 3])
+#xi = np.array([-2, -1, 1, 3])
 #xi = np.array([-2, -0.5, 0.5, 1, 1.5])
-#xi = np.array([-1, 0, 1])
+xi = np.array([-1, 0, 1])
 #xi = np.linspace(-1, 1, 3)
 #xi = np.array([0,1,2,3,4])
 
 # Stuetzwerte
-fi = np.array([8, 0, 2, -12])
+#fi = np.array([8, 0, 2, -12])
 #fi = np.array([-4, 0.5, 3.5, 5, 6.5])
-#f = lambda x : abs(x)
-#fi = np.array(f(xi))
+f = lambda x : abs(x)
+fi = np.array(f(xi))
 
 # Auswertungspunkte
 #X = np.arange(-10, 10)

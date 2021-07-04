@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import enum
 
+plt.style.use('dark_background')
+
 class LINE_TYPE(enum.Enum):
     no_type = 0
     line = 1
@@ -52,7 +54,9 @@ def plot_funcs(functions):
         i += 1
 
     plt.legend()
-    plt.grid()
+    #plt.grid()
+    #plt.grid(color = 'floralwhite', linestyle = '--', linewidth = 0.5)
+    plt.grid(color = 'floralwhite', linewidth=0.3)
     plt.show()
 
 
