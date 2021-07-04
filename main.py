@@ -1,11 +1,7 @@
 import numpy as np
-
-#import scipy as sci
-#import scipy.interpolate as sciint
-
 import sympy as sp
 
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import math
 
 # local Modules
@@ -19,43 +15,40 @@ import cubic_spline as cubsp
 ################## SETTINGS ################### 
 LAGRAGE = False
 NEVILLE = False
-NEWTON = True
+NEWTON = False
 SPLINE = True
 spline_type = cubsp.SPLINE_TYPE.natural
 
+# numpy array data type: float64
 dt = np.dtype('f8')
 
 
 ################### INPUTS ################### 
-# Stuetzstellen
-# list of x values
-lx1 = [-2, -1, 1, 3]
-lx2 = [-2, -1, 1, 3]
-lx3 = [-2, -1, 1, 3]
-lx4 = [-2, -1, 0, 1, 3]
-lx4 = [-2, -1, 1, 3, 0]
-lx4 = [-2, -0.5, 0.5, 1, 1.5]
-lx4 = [-1, 0, 1]
-
-#xi = np.linspace(-1, 1, 3, dtype=dt)
-xi = np.array(lx1, dtype=dt)
-
-# Stuetzwerte
-# list of f(x) values
-ly1 = [8, 0, 2, -12]
-ly2 = [7, 0, 1, 2, -12]
-ly3 = [8, 0, 2, -12, 1]
-ly4 = [-4, 0.5, 3.5, 5, 6.5]
-
-# define own function
-f = lambda x : abs(x)
-lf1 = f(xi)
-fi = np.array(ly1, dtype=dt)
-
 # Auswertungspunkte
 #X = np.arange(-10, 10)
 X = np.array([2])
 x = X[0]
+
+# i |   0   1  2    3
+lx1 = [-2, -1, 1,   3] # Stuetzstellen
+lf1 = [ 8,  0, 2, -12] # Stuetzwerte
+
+lx2 = [-2, -1, 1,   3, 0]
+lf2 = [ 8,  0, 2, -12, 1]
+
+lx3 = [-2, -0.5, 0.5, 1, 1.5]
+lf3 = [-4,  0.5, 3.5, 5, 6.5]
+
+# if you want to define your own function
+lx4 = np.array([-1, 0, 1], dtype=dt)
+f = lambda x : abs(x) # f(x) = |x|
+lf4 = f(lx4) # Stuetzwerte
+
+
+#xi = np.linspace(-1, 1, 3, dtype=dt)
+# define x and f(x) data
+xi = np.array(lx4, dtype=dt)
+fi = np.array(lf4, dtype=dt)
 
 # functions to plot
 funcs = [pf.PlotFunc(xi, fi, pf.LINE_TYPE.line, color="red", name="input_func")]
