@@ -13,12 +13,13 @@ import cubic_spline as cubsp
 
 
 ################## SETTINGS ################### 
-LAGRAGE = True
-NEVILLE = True
-NEWTON = True
+LAGRAGE = False
+NEVILLE = False
+NEWTON = False
 SPLINE = True
-spline_types = [cubsp.SPLINE_TYPE.natural, \
-                cubsp.SPLINE_TYPE.complete, cubsp.SPLINE_TYPE.periodic]
+spline_types = [cubsp.SPLINE_TYPE.natural]
+#spline_types = [cubsp.SPLINE_TYPE.natural, \
+                #cubsp.SPLINE_TYPE.complete, cubsp.SPLINE_TYPE.periodic]
 
 # numpy array data type: float64
 dt = np.dtype('f8')

@@ -51,7 +51,7 @@ def cubic_spline(xi, fi, spline_type, f=None, fd1=None):
         SiD2.append(d2)
         print(f"\ns{i}'(x)")
         #print(f"s{i}'= {d1} \t\t s{i}'' = {d2}")
-        sp.pprint(d1)
+        sp.pprint(sp.expand(d1))
         print(f"\ns{i}''(x)")
         sp.pprint(d2)
 
@@ -59,20 +59,24 @@ def cubic_spline(xi, fi, spline_type, f=None, fd1=None):
     inter_points = xi[1:n-1]
     ipl = len(inter_points)
     lgs = []
+    # Stetigkeitsbedingung
+    # for x1,...,xn-1
     for i in range(ipl):
+        # Si'(xi) = Si+1'(xi)
         si1d1 = SiD1[i+1].subs(x, inter_points[i])
         si2d1 = SiD1[i+2].subs(x, inter_points[i])
         a1 = sp.Eq(si1d1, si2d1)
 
+        # Si''(xi) = Si+1''(xi)
         si1d2 = SiD2[i+1].subs(x, inter_points[i])
         si2d2 = SiD2[i+2].subs(x, inter_points[i])
         a2 = sp.Eq(si1d2, si2d2)
 
         lgs.extend([a1, a2])
-        sp.pprint(a1)
+        sp.pprint(a1, wrap_line=False)
         sp.pprint(a2)
 
-
+    # Interpolationsbedingungen
     for i in range(1, n):
         sim1 = Si[i].subs(x, xi[i-1])
         si = Si[i].subs(x, xi[i])
@@ -168,6 +172,7 @@ def cubic_spline(xi, fi, spline_type, f=None, fd1=None):
 
         # print solved si
         print(f"\nS{i}: interval: {inter[i-1]}")
+        sp.pprint(sxi)
         sp.pprint(sp.simplify(sxi))
 
     ## return all si (functions)
