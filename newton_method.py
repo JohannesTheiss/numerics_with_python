@@ -65,7 +65,7 @@ def newton_method(F, xis):
 
 
 
-def newton_method_iteration(phi, xis, number_of_iterations, fixed_point, start_vec_inter):
+def newton_method_iteration(phi, xis, number_of_iterations, start_vec_inter):
     print("####### NEWTON METHOD ITERATION ####### ")
     print(xis)
     print(start_vec_inter)
@@ -84,7 +84,7 @@ def newton_method_iteration(phi, xis, number_of_iterations, fixed_point, start_v
         for i in range(xis_len):
             curr_phi = curr_phi.subs(xis[i], curr_approx[i])
 
-        print(f"x^({iteration+1})")
+        print(f"\nx^({iteration+1}) = φ(x^({iteration}))")
         sp.pprint(curr_phi)
         iteration_steps.append(curr_phi)
 
@@ -96,33 +96,46 @@ def newton_method_iteration(phi, xis, number_of_iterations, fixed_point, start_v
 
 
 
+# numpy datatype: float64
 dt = np.dtype('f8')
 
-dim = 2
-# define Function
+# define variables and the order of derivation
 xis =[x1, x2] = sp.symbols("x1, x2")
+
+# define Function
+# ⎡  3     3    ⎤
+# ⎢x₁  + x₂  - 4⎥
+# ⎢             ⎥
+# ⎢    3     3  ⎥
+# ⎣  x₁  - x₂   ⎦
+# line 1
 f1 = (x1**3) + (x2**3) - 4
+# line 2
 f2 = (x1**3) - (x2**3)
 F = sp.Matrix([[f1], [f2]])
 
-number_of_iterations = 5
+# define the number of iterations the newton_method should do
+number_of_iterations = 2
 
-# define order of derivation
-#xis = [x1, x2, z]
-
-fixed_point = sp.zeros(dim, 1) # 0 vector
-
-steps_in_inter = 5
-x1_inter = np.linspace(1, 2, steps_in_inter)  # [1, 2]
-x2_inter = np.linspace(1, 2, steps_in_inter) # [1, 2]
-#start_vec_inter = np.matrix([x1_inter, x2_inter], dtype=dt) # [1, 2] x [1, 2]
-
-#start_vec_inter = np.array([1, 1], dtype=dt)
-start_vec_inter = [1, 1]
+# define the start_vec of the interation
+start_vec = [1, 1]
 
 
 phi = newton_method(F, xis)
 if phi != None:
-    ite = newton_method_iteration(phi, xis, number_of_iterations, fixed_point, start_vec_inter)
+    ite = newton_method_iteration(phi, xis, number_of_iterations, start_vec)
+
+
+
+
+
+#### OLD CODE ####
+#dim = 2
+#fixed_point = sp.zeros(dim, 1) # 0 vector
+#steps_in_inter = 5
+#x1_inter = np.linspace(1, 2, steps_in_inter)  # [1, 2]
+#x2_inter = np.linspace(1, 2, steps_in_inter) # [1, 2]
+#start_vec_inter = np.matrix([x1_inter, x2_inter], dtype=dt) # [1, 2] x [1, 2]
+#start_vec_inter = np.array([1, 1], dtype=dt)
 
 

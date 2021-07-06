@@ -43,6 +43,8 @@ def newton(xi, fi, x=None, debug=True):
     print(f"p({x}) = {px}")
     print("newton poly:")
     sp.pprint(newton_poly)
+    print("=")
+    sp.pprint(sp.simplify(newton_poly))
 
     return newton_poly, px
 

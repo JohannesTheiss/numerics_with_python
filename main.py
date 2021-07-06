@@ -6,21 +6,35 @@ import math
 
 # local Modules
 import plot_func as pf
+import util as util
 import lagrange as lagr
 import neville as nevi
 import newton as newt
 import cubic_spline as cubsp
+import lms as equalizing
+
 
 
 ################## SETTINGS ################### 
+PLOTTING = True
+
 LAGRAGE = False
 NEVILLE = False
 NEWTON = False
-SPLINE = True
-spline_types = [cubsp.SPLINE_TYPE.natural]
-#spline_types = [cubsp.SPLINE_TYPE.natural, \
-                #cubsp.SPLINE_TYPE.complete, cubsp.SPLINE_TYPE.periodic]
 
+# spline settings
+SPLINE = False
+#spline_types = [cubsp.SPLINE_TYPE.natural]
+spline_types = [cubsp.SPLINE_TYPE.natural, \
+                cubsp.SPLINE_TYPE.complete, cubsp.SPLINE_TYPE.periodic]
+
+# LMS settings
+LMS = True # or LAP
+# poly_degree=2 => φ_1(x)=1, φ_2(x)=x^1
+poly_degree = 2 # or k
+
+
+# NUMPY SETTINGS
 # numpy array data type: float64
 dt = np.dtype('f8')
 
@@ -32,8 +46,21 @@ X = np.array([2])
 x = X[0]
 
 # i |   0   1  2    3
-lx1 = [-2, -1, 1,   3] # Stuetzstellen
-lf1 = [ 8,  0, 2, -12] # Stuetzwerte
+#lx1 = [-2, -1, 1,   3] # Stuetzstellen
+#lf1 = [ 8,  0, 2, -12] # Stuetzwerte
+
+#lx1 = [-1, 0, 1, 3] # Stuetzstellen
+#lf1 = [0, -1, -2, 20] # Stuetzwerte
+
+lx1 = [-1, 0, 1, 2] # Stuetzstellen
+lf1 = [3/10, 1/10, 0, 0] # Stuetzwerte
+f1, f2 = sp.symbols("f1, f2")
+lf11 = [3/10, 1/10, f1, f2] # Stuetzwerte
+
+#lx1 = [-2, -1, 1, 3] # Stuetzstellen
+#lf1 = [8, 0, 2, -12] # Stuetzwerte
+
+
 
 lx2 = [-2, -1, 1,   3, 0]
 lf2 = [ 8,  0, 2, -12, 1]
@@ -68,8 +95,8 @@ lf4 = f(lx4) # Stuetzwerte
 
 #xi = np.linspace(-1, 1, 3, dtype=dt)
 # define x and f(x) data
-xi = np.array(lx4, dtype=dt)
-fi = np.array(lf4, dtype=dt)
+xi = np.array(lx1, dtype=dt)
+fi = np.array(lf1, dtype=dt)
 
 # functions to plot
 funcs = [pf.PlotFunc(xi, fi, pf.LINE_TYPE.line, color="red", name="input_func")]
@@ -148,6 +175,21 @@ if SPLINE:
                 funcs.append(pf.PlotFunc(cubic_new_x_scale, cubic_spline_func, line_type=pf.LINE_TYPE.dashed, color=spline_colors[i] ,name=f"cubic_spline({spline_type}), n={xi.size}"))
 
 
+if LMS:
+    lms = equalizing.lms(xi, lf11, poly_degree)
+    start = xi[0]
+    end = xi[xi.size-1]
+    num_of_point = 500
+    fx_xi = util.evalFunc(lms, start, end, num_of_point)
+
+    if fx_xi != None:
+        lms_new_x_scale = np.linspace(start, end, num_of_point)
+        if fx_xi.size != 0:
+            funcs.append(pf.PlotFunc(lms_new_x_scale, fx_xi, line_type=pf.LINE_TYPE.dashed, color="snow", \
+                                     name=f"LMS poly_degree={poly_degree}"))
+
+
+
 
 ############ ERROR ##################
 #error = False
@@ -162,5 +204,6 @@ if SPLINE:
 
 
 ################### PLOTTING ################### 
-pf.plot_funcs(funcs)
+if PLOTTING:
+    pf.plot_funcs(funcs)
 
