@@ -55,7 +55,6 @@ def newton_method(F, xis):
 
             return phi
 
-
         else:
             print("ERROR: newton_method.py: F'(x^(k)) is singular <=> det(F'(x^(k))) = 0")
             return None

@@ -1,8 +1,6 @@
 import numpy as np
 import sympy as sp
 
-
-
 # func(x)
 def evalFunc(func, start, end, num_of_point):
     if func != None:
@@ -21,5 +19,47 @@ def evalFunc(func, start, end, num_of_point):
         return fx_xi
     else:
         return None
+
+
+def print_default(name, new_line=False):
+    if new_line:
+        print()
+    print(f"{name}:")
+
+def print_arr(name, data, new_line=False, prec=8):
+    print_default(name, new_line)
+
+    sp.pprint(data)
+    print("=")
+    data_list = []
+    #sp.pprint(sp.nsimplify(data))
+    for d in data:
+        nsimp = sp.nsimplify(d)
+        simp = sp.simplify(d)
+        rou = np.round(d, prec)
+        #if nsimp == simp:
+            #print("smae", nsimp, simp)
+        #if simp == rou:
+            #print("round", rou)
+        eqs = str(nsimp) + " = " + str(simp) + " = " + str(rou) + "\n"
+        data_list.append(eqs)
+    sp.pprint(data_list)
+
+
+def print_poly(name, poly, new_line=False):
+    print_default(name, new_line)
+
+    #sp.pprint(poly)
+    #print("=")
+    fac = sp.factor(poly)
+    if fac == poly:
+        print("same")
+        sp.pprint(poly)
+    else:
+        print("not same")
+        sp.pprint(poly)
+        sp.pprint(fac)
+    #sp.pprint(sp.expand(poly))
+
 
 

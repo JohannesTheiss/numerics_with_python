@@ -7,7 +7,6 @@ class SPLINE_TYPE(enum.Enum):
      complete = 1
      periodic = 2
 
-
 def append_equations(lgs, eqs, PRINT=True):
     for lhs, rhs in eqs:
         eq = sp.Eq(lhs, rhs)

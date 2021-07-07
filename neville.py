@@ -1,4 +1,9 @@
 import numpy as np
+import sympy as sp
+import util
+
+
+prec = 5
 
 def neville(xi, fi, x, debug=True):
     print("NEVILLE:")
@@ -15,13 +20,15 @@ def neville(xi, fi, x, debug=True):
             pjk = (((x-xi[j])*p[j+1]) - ((x-xi[new_k])*p[j])) / (xi[new_k] - xi[j])
 
             # print
-            print(f"P {j},{new_k} = ({x} - {xi[j]})* {p[j+1]} \t- ({x} - {xi[new_k]})* {p[j]} \t/ ({xi[new_k]} - {xi[j]}) \t = {pjk}")
+            print(f"P {j},{new_k} = ({x} - {xi[j]})* {p[j+1]} \t- ({x} - {xi[new_k]})* {p[j]} \t/ ({xi[new_k]} - {xi[j]}) \t = {pjk} = {np.round(pjk, prec)}")
 
             # update the value in the array
             p[j] = pjk
 
 
     print(f"P 0,{n-1} = p({x}) = {p[0]}")
+    print("=")
+    sp.pprint(sp.nsimplify(p[0]))
     return p[0]
 
 

@@ -16,10 +16,10 @@ import lms as equalizing
 
 
 ################## SETTINGS ################### 
-PLOTTING = True
+PLOTTING = False
 
-LAGRAGE = False
-NEVILLE = False
+LAGRAGE = True
+NEVILLE = True
 NEWTON = False
 
 # spline settings
@@ -29,7 +29,7 @@ spline_types = [cubsp.SPLINE_TYPE.natural, \
                 cubsp.SPLINE_TYPE.complete, cubsp.SPLINE_TYPE.periodic]
 
 # LMS settings
-LMS = True # or LAP
+LMS = False # or LAP
 # poly_degree=2 => φ_1(x)=1, φ_2(x)=x^1
 poly_degree = 2 # or k
 

@@ -3,6 +3,8 @@ import numpy as np
 from scipy.interpolate import lagrange
 from numpy.polynomial.polynomial import Polynomial
 
+import util
+
 def lagr(xi, fi, X=np.array([]), debug=True, prec=4):
     print("LAGRANGE:")
     poly = lagrange(xi, fi)
@@ -13,9 +15,14 @@ def lagr(xi, fi, X=np.array([]), debug=True, prec=4):
         res = np.round(np.polyval(coef, X), prec)
 
     if debug:
-        print("p(x):")
-        print(poly)
-        print(f"coef: {np.round(coef, prec)}")
+        #print("p(x):")
+        #print(poly)
+
+        util.print_poly("p(x)", poly)
+
+        #print(f"coef: {np.round(coef, prec)}")
+
+        util.print_arr("coef", coef)
         if res.size != 0 and res.size == X.size:
             for i in range(res.size):
                 print(f"p({X[i]})\t: {res[i]}")
