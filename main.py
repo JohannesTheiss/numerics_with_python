@@ -30,9 +30,9 @@ spline_types = [cubsp.SPLINE_TYPE.natural]
 #                cubsp.SPLINE_TYPE.complete, cubsp.SPLINE_TYPE.periodic]
 
 # LMS settings
-LMS = True # or LAP
+LMS = True # orAusgleichsfunktionen LAP
 # poly_degree=2 => φ_1(x)=1, φ_2(x)=x^1
-poly_degree = 2 # or k
+poly_degree = 1 # or k
 
 
 # NUMPY SETTINGS
@@ -58,12 +58,13 @@ x = X[0]
 #f1, f2 = sp.symbols("f1, f2")
 #lf11 = [3/10, 1/10, f1, f2] # Stuetzwerte
 
-#lx1 = np.array([(-3 + i) for i in range(0, 7)], dtype=dt)
-#f1 = lambda xk : np.abs(xk)
-#lf1 = f1(lx1)
+lx1 = np.array([(-3 + i) for i in range(0, 7)], dtype=dt)
+print(lx1)
+f1 = lambda xk : np.abs(xk)
+lf1 = f1(lx1)
 
-lx1 = [-1, 0, 1, 3] # Stuetzstellen
-lf1 = [0, -1, -2, 20] # Stuetzwerte
+#lx1 = [-1, 0, 1, 3] # Stuetzstellen
+#lf1 = [0, -1, -2, 20] # Stuetzwerte
 
 #lx1 = [-2, -1, 1, 3] # Stuetzstellen
 #lf1 = [8, 0, 2, -12] # Stuetzwerte
