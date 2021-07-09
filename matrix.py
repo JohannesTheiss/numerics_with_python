@@ -24,9 +24,9 @@ prec = 7
 
 
 ######### inputs ###############
-lx = np.array([(-3 + i) for i in range(0, 7)], dtype=dt)
-fxi = lambda xk : np.abs(xk)
-xi = fxi(lx)
+xi = np.array([(-3 + i) for i in range(0, 7)], dtype=dt)
+f1 = lambda xk : np.abs(xk)
+fi = f1(xi)
 print(xi)
 
 # build Matrix
@@ -43,7 +43,7 @@ line3 = sp.Matrix([f2(xi)]).T
 m = [line1, line2, line3]
 
 
-if False:
+if True:
     # print lines
     for i in range(len(m)):
         print(f"line{i}:")
@@ -74,6 +74,18 @@ print("ATA:")
 sp.pprint(ATA)
 print("=")
 ppMatrix(ATA)
+
+# ATF 
+F = sp.Matrix([fi]).T
+sp.pprint(F)
+
+ATF = AT * F
+print("ATF:")
+sp.pprint(ATF)
+print("=")
+ppMatrix(ATF)
+
+
 
 
 

@@ -59,7 +59,6 @@ x = X[0]
 #lf11 = [3/10, 1/10, f1, f2] # Stuetzwerte
 
 lx1 = np.array([(-3 + i) for i in range(0, 7)], dtype=dt)
-print(lx1)
 f1 = lambda xk : np.abs(xk)
 lf1 = f1(lx1)
 
