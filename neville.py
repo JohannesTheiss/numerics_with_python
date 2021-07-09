@@ -3,10 +3,10 @@ import sympy as sp
 import util
 
 
-prec = 5
+prec = 7
 
 def neville(xi, fi, x, debug=True):
-    print("NEVILLE:")
+    print(f"NEVILLE: (prec. = {prec})")
     if xi.size != fi.size:
         print("xi and yi must have same first dimension")
         return None
@@ -20,7 +20,7 @@ def neville(xi, fi, x, debug=True):
             pjk = (((x-xi[j])*p[j+1]) - ((x-xi[new_k])*p[j])) / (xi[new_k] - xi[j])
 
             # print
-            print(f"P {j},{new_k} = ({x} - {xi[j]})* {p[j+1]} \t- ({x} - {xi[new_k]})* {p[j]} \t/ ({xi[new_k]} - {xi[j]}) \t = {pjk} = {np.round(pjk, prec)}")
+            print(f"P {j},{new_k} = ({x} - {xi[j]})* {p[j+1]} \t- ({x} - {xi[new_k]})* {p[j]} \t/ ({xi[new_k]} - {xi[j]}) \t = {pjk} = {np.round(pjk, prec)} = {sp.nsimplify(pjk)}")
 
             # update the value in the array
             p[j] = pjk

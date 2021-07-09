@@ -4,8 +4,10 @@ import math
 import sympy as sp
 from sympy.parsing.sympy_parser import parse_expr
 
+prec = 7
+
 def newton(xi, fi, x=None, debug=True):
-    print("NEWTON:")
+    print(f"NEWTON: (prec = {prec})")
     if xi.size != fi.size:
         print("xi and yi must have same first dimension")
         return None
@@ -20,7 +22,7 @@ def newton(xi, fi, x=None, debug=True):
             pjk = (p[j+1] - p[j]) / (xi[new_k] - xi[j])
 
             # print
-            print(f"P {j},{new_k} =\t {p[j+1]} - {p[j]}      \t/ ({xi[new_k]} - {xi[j]}) \t = {pjk}")
+            print(f"P {j},{new_k} =\t {p[j+1]} - {p[j]}      \t/ ({xi[new_k]} - {xi[j]}) \t = {pjk} = {np.round(pjk, prec)} = {sp.nsimplify(pjk)}")
 
             # update the value in the array
             p[j] = pjk
@@ -41,10 +43,17 @@ def newton(xi, fi, x=None, debug=True):
     # prints
     print(f"coefs: {coefs}")
     print(f"p({x}) = {px}")
+    print("=")
+    sp.pprint(sp.nsimplify(px))
     print("newton poly:")
     sp.pprint(newton_poly)
     print("=")
-    sp.pprint(sp.simplify(newton_poly))
+    simp = sp.simplify(newton_poly)
+    sp.pprint(simp)
+    print("=")
+    sp.pprint(sp.nsimplify(newton_poly))
+    print("=")
+    sp.pprint(sp.nsimplify(simp))
 
     return newton_poly, px
 

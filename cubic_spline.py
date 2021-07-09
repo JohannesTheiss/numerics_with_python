@@ -152,6 +152,8 @@ def cubic_spline(xi, fi, spline_type, f=None, fd1=None):
 
     print("\nsolved LGS:")
     sp.pprint(solved_lgs)
+    print("=")
+    sp.pprint(sp.nsimplify(solved_lgs))
 
     sx = []
     for i in range(1, Sil):
@@ -172,7 +174,11 @@ def cubic_spline(xi, fi, spline_type, f=None, fd1=None):
         # print solved si
         print(f"\nS{i}: interval: {inter[i-1]}")
         sp.pprint(sxi)
-        sp.pprint(sp.simplify(sxi))
+        print("=")
+        simp = sp.simplify(sxi)
+        sp.pprint(simp)
+        print("=")
+        sp.pprint(sp.nsimplify(simp))
 
     ## return all si (functions)
     return sx
