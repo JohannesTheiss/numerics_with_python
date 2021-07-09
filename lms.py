@@ -12,6 +12,8 @@ def lms(xi, fi, poly_degree):
     # make phis and y_vec
     phis = []
     for j in range(poly_degree):
+        #if j % 2 != 0:
+            #continue
         phi = x**(j)
         phis.append(phi)
 

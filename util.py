@@ -18,7 +18,7 @@ def evalFunc(func, start, end, num_of_point):
 
         return fx_xi
     else:
-        return None
+        return np.array([])
 
 
 def print_default(name, new_line=False):

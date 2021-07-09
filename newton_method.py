@@ -3,12 +3,27 @@ import sympy as sp
 
 DELIMITER = "-----------------------------------------"
 
+
+def print_with_start_vec(F, var, start_vec):
+    print("=")
+    print("print with start vec:")
+    if len(var) != len(start_vec):
+        print("ERROR print_with_start_vec")
+        return
+
+    f = F
+    for i in range(len(var)):
+        f = f.subs(var[i], start_vec[i])
+
+    sp.pprint(f)
+
 # THE ORDER OF THE xis is IMPORTANT for derivation !!!!
-def newton_method(F, xis):
+def newton_method(F, xis, start_vec):
     print("####### NEWTON METHOD ####### ")
     print("F(x):")
     sp.pprint(F)
 
+    # culc. F'
     Fd1 = sp.Matrix()
     for var in xis:
         fd1 = F.diff(var)
@@ -17,6 +32,8 @@ def newton_method(F, xis):
     shape = sp.shape(Fd1)
     print(f"\nF'(x): ∊ {shape[0]}x{shape[1]}")
     sp.pprint(Fd1)
+    print_with_start_vec(Fd1, xis, start_vec)
+
     #str_fd1 = sp.pretty(Fd1)
     #print("hasd", str_fd1)
 
@@ -26,15 +43,17 @@ def newton_method(F, xis):
         print("culc with: d^(k) = -[F'(x^(k))]^-1 * F(x^(x))")
         # culc det()
         det = Fd1.det()
-
         print("det(F'(x)) = ")
         sp.pprint(det)
+        print_with_start_vec(det, xis, start_vec)
 
         print()
         if det != 0:
+            # culc F'.inv
             Fd1_inv = Fd1.inv()
             print("[F'(x^(k))]^-1 = F'.inv")
             sp.pprint(Fd1_inv)
+            print_with_start_vec(Fd1_inv, xis, start_vec)
 
             print(DELIMITER)
             # culc d
@@ -44,6 +63,7 @@ def newton_method(F, xis):
             d = sp.simplify(d)
             print("=")
             sp.pprint(d)
+            print_with_start_vec(d, xis, start_vec)
 
             # culc φ 
             phi = sp.Matrix(xis) - d
@@ -52,6 +72,7 @@ def newton_method(F, xis):
             phi = sp.simplify(phi)
             print("=")
             sp.pprint(phi)
+            print_with_start_vec(d, xis, start_vec)
 
             return phi
 
@@ -99,7 +120,8 @@ def newton_method_iteration(phi, xis, number_of_iterations, start_vec_inter):
 dt = np.dtype('f8')
 
 # define variables and the order of derivation
-xis =[x1, x2] = sp.symbols("x1, x2")
+#xis =[x1, x2] = sp.symbols("x1, x2")
+xis =[x, y, z] = sp.symbols("x, y, z")
 
 # define Function
 # ⎡  3     3    ⎤
@@ -108,19 +130,36 @@ xis =[x1, x2] = sp.symbols("x1, x2")
 # ⎢    3     3  ⎥
 # ⎣  x₁  - x₂   ⎦
 # line 1
-f1 = (x1**3) + (x2**3) - 4
+#f1 = (x1**3) + (x2**3) - 4
 # line 2
-f2 = (x1**3) - (x2**3)
-F = sp.Matrix([[f1], [f2]])
+#f2 = (x1**3) - (x2**3)
+#F = sp.Matrix([[f1], [f2]])
+
+f1 = 2*x**2 - z
+f2 = 1 + (y**2)*x
+f3 = x**2 + z**2 - 1
+F = sp.Matrix([[f1], [f2], [f3]])
+start_vec = [1, 1, 0]
+
+
 
 # define the number of iterations the newton_method should do
-number_of_iterations = 2
+number_of_iterations = 1
 
 # define the start_vec of the interation
-start_vec = [1, 1]
+#start_vec = [1, 1]
 
 
-phi = newton_method(F, xis)
+# bsp: x**2 = 0
+# start: x0 = 1
+x1 = sp.symbols("x1")
+#xis = [x1]
+#f1 = x1**2
+#F = sp.Matrix([[f1]])
+#start_vec = [1]
+
+
+phi = newton_method(F, xis, start_vec)
 if phi != None:
     ite = newton_method_iteration(phi, xis, number_of_iterations, start_vec)
 

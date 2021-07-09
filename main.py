@@ -16,22 +16,23 @@ import lms as equalizing
 
 
 ################## SETTINGS ################### 
-PLOTTING = False
+PLOTTING = True
 
-LAGRAGE = True
-NEVILLE = True
+LAGRAGE = False
+NEVILLE = False
 NEWTON = False
 
 # spline settings
-SPLINE = False
-#spline_types = [cubsp.SPLINE_TYPE.natural]
-spline_types = [cubsp.SPLINE_TYPE.natural, \
-                cubsp.SPLINE_TYPE.complete, cubsp.SPLINE_TYPE.periodic]
+SPLINE = True
+spline_types = [cubsp.SPLINE_TYPE.natural]
+#spline_types = [cubsp.SPLINE_TYPE.complete]
+#spline_types = [cubsp.SPLINE_TYPE.natural, \
+#                cubsp.SPLINE_TYPE.complete, cubsp.SPLINE_TYPE.periodic]
 
 # LMS settings
 LMS = False # or LAP
 # poly_degree=2 => φ_1(x)=1, φ_2(x)=x^1
-poly_degree = 2 # or k
+poly_degree = 5 # or k
 
 
 # NUMPY SETTINGS
@@ -52,15 +53,20 @@ x = X[0]
 #lx1 = [-1, 0, 1, 3] # Stuetzstellen
 #lf1 = [0, -1, -2, 20] # Stuetzwerte
 
-lx1 = [-1, 0, 1, 2] # Stuetzstellen
-lf1 = [3/10, 1/10, 0, 0] # Stuetzwerte
-f1, f2 = sp.symbols("f1, f2")
-lf11 = [3/10, 1/10, f1, f2] # Stuetzwerte
+#lx1 = [-1, 0, 1, 2] # Stuetzstellen
+#lf1 = [3/10, 1/10, 0, 0] # Stuetzwerte
+#f1, f2 = sp.symbols("f1, f2")
+#lf11 = [3/10, 1/10, f1, f2] # Stuetzwerte
+
+#lx1 = np.array([(-3 + i) for i in range(0, 7)], dtype=dt)
+#f1 = lambda xk : np.abs(xk)
+#lf1 = f1(lx1)
+
+lx1 = [-1, 0, 1, 3] # Stuetzstellen
+lf1 = [0, -1, -2, 20] # Stuetzwerte
 
 #lx1 = [-2, -1, 1, 3] # Stuetzstellen
 #lf1 = [8, 0, 2, -12] # Stuetzwerte
-
-
 
 lx2 = [-2, -1, 1,   3, 0]
 lf2 = [ 8,  0, 2, -12, 1]
@@ -176,13 +182,14 @@ if SPLINE:
 
 
 if LMS:
-    lms = equalizing.lms(xi, lf11, poly_degree)
+    #lms = equalizing.lms(xi, lf11, poly_degree)
+    lms = equalizing.lms(xi, fi, poly_degree)
     start = xi[0]
     end = xi[xi.size-1]
     num_of_point = 500
     fx_xi = util.evalFunc(lms, start, end, num_of_point)
 
-    if fx_xi != None:
+    if fx_xi.size > 0:
         lms_new_x_scale = np.linspace(start, end, num_of_point)
         if fx_xi.size != 0:
             funcs.append(pf.PlotFunc(lms_new_x_scale, fx_xi, line_type=pf.LINE_TYPE.dashed, color="snow", \
