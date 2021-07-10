@@ -71,7 +71,6 @@ def print_poly(name, poly, new_line=False):
     #sp.pprint(sp.expand(poly))
 
 
-
 def func_max_norm():
     xi = np.linspace(0, 1, 1000000)
     f = lambda x : 24/((1+x)**5)

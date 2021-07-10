@@ -51,7 +51,7 @@ def NCQF(func, I, a, b, mi):
         func_xi = func.subs(x, xi[i])
         next_value = (h * weights[i] * func_xi)
         Im += next_value
-        print(f"h * {sp.nsimplify(weights[i])} * {func}")
+        print(f"h * {sp.nsimplify(weights[i])} * ({func})")
         print(f"=> {h} * {sp.nsimplify(weights[i])} * {sp.nsimplify(func_xi)} = {next_value} = {sp.nsimplify(next_value)}\n")
 
 
@@ -91,18 +91,18 @@ def SNCQF(func, I, a, b, m, N):
 
 ### Interval
 a = 0 # start
-b = 1 # end
+b = 2 # end
 mi = [0, 1, 2, 3, 4]
-m = 0
+m = 2
 
 # number of partial intervals
-N = 2
+N = 3
 
 
 ### function
 x = sp.symbols("x")
-func = 1/(1+x)
-#func = (x**3) - x
+#func = 1/(1+x)
+func = (x**3) - x
 
 # integrated function
 I = sp.integrate(func, (x, a, b))
@@ -117,11 +117,9 @@ sp.pprint(I)
 print(f"= {I_value}")
 
 
-for i in mi:
-    NCQF(func, I, a, b, i)
+#for i in mi:
+    #NCQF(func, I, a, b, i)
 
-#SNCQF(func, I, a, b, m, N)
-
-
+SNCQF(func, I, a, b, m, N)
 
 
