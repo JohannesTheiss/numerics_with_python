@@ -23,14 +23,14 @@ NEVILLE = False
 NEWTON = False
 
 # spline settings
-SPLINE = False
+SPLINE = True
 spline_types = [cubsp.SPLINE_TYPE.natural]
 #spline_types = [cubsp.SPLINE_TYPE.complete]
 #spline_types = [cubsp.SPLINE_TYPE.natural, \
 #                cubsp.SPLINE_TYPE.complete, cubsp.SPLINE_TYPE.periodic]
 
 # LMS settings
-LMS = True # orAusgleichsfunktionen LAP
+LMS = False # orAusgleichsfunktionen LAP
 # poly_degree=2 => φ_1(x)=1, φ_2(x)=x^1
 poly_degree = 1 # or k
 
@@ -48,7 +48,7 @@ x = X[0]
 
 # i |   0   1  2    3
 #lx1 = [-2, -1, 1,   3] # Stuetzstellen
-#lf1 = [ 8,  0, 2, -12] # Stuetzwerte
+##lf1 = [ 8,  0, 2, -12] # Stuetzwerte
 
 #lx1 = [-1, 0, 1, 3] # Stuetzstellen
 #lf1 = [0, -1, -2, 20] # Stuetzwerte
@@ -58,9 +58,9 @@ x = X[0]
 #f1, f2 = sp.symbols("f1, f2")
 #lf11 = [3/10, 1/10, f1, f2] # Stuetzwerte
 
-lx1 = np.array([(-3 + i) for i in range(0, 7)], dtype=dt)
-f1 = lambda xk : np.abs(xk)
-lf1 = f1(lx1)
+#lx1 = np.array([(-3 + i) for i in range(0, 7)], dtype=dt)
+#f1 = lambda xk : np.abs(xk)
+#lf1 = f1(lx1)
 
 #lx1 = [-1, 0, 1, 3] # Stuetzstellen
 #lf1 = [0, -1, -2, 20] # Stuetzwerte
@@ -101,8 +101,8 @@ lf4 = f(lx4) # Stuetzwerte
 
 #xi = np.linspace(-1, 1, 3, dtype=dt)
 # define x and f(x) data
-xi = np.array(lx1, dtype=dt)
-fi = np.array(lf1, dtype=dt)
+xi = np.array(lx4, dtype=dt)
+fi = np.array(lf4, dtype=dt)
 
 # functions to plot
 funcs = [pf.PlotFunc(xi, fi, pf.LINE_TYPE.line, color="red", name="input_func")]

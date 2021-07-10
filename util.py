@@ -1,6 +1,11 @@
 import numpy as np
 import sympy as sp
 
+red = '\033[91m'
+bold = '\033[1m'
+end = '\033[0m'
+
+
 # func(x)
 def evalFunc(func, start, end, num_of_point):
     if func != None:
@@ -19,6 +24,10 @@ def evalFunc(func, start, end, num_of_point):
         return fx_xi
     else:
         return np.array([])
+
+
+def print_heading(text):
+    print(bold + red + text +  end)
 
 
 def print_default(name, new_line=False):
@@ -60,6 +69,21 @@ def print_poly(name, poly, new_line=False):
         sp.pprint(poly)
         sp.pprint(fac)
     #sp.pprint(sp.expand(poly))
+
+
+
+def func_max_norm():
+    xi = np.linspace(0, 1, 1000000)
+    f = lambda x : 24/((1+x)**5)
+    fi = np.abs(f(xi))
+    #print(fi)
+    m = max(fi)
+    print(f"max: {m}")
+    return m
+
+
+func_max_norm()
+
 
 
 
