@@ -82,7 +82,7 @@ def func_max_norm():
     return m
 
 
-func_max_norm()
+#func_max_norm()
 
 
 

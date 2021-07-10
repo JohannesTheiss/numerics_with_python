@@ -120,8 +120,8 @@ def newton_method_iteration(phi, xis, number_of_iterations, start_vec_inter):
 dt = np.dtype('f8')
 
 # define variables and the order of derivation
-#xis =[x1, x2] = sp.symbols("x1, x2")
-xis =[x, y, z] = sp.symbols("x, y, z")
+xis =[x1, x2] = sp.symbols("x1, x2")
+#xis =[x, y, z] = sp.symbols("x, y, z")
 
 # define Function
 # ⎡  3     3    ⎤
@@ -130,29 +130,30 @@ xis =[x, y, z] = sp.symbols("x, y, z")
 # ⎢    3     3  ⎥
 # ⎣  x₁  - x₂   ⎦
 # line 1
-#f1 = (x1**3) + (x2**3) - 4
+f1 = (x1**3) + (x2**3) - 4
 # line 2
-#f2 = (x1**3) - (x2**3)
-#F = sp.Matrix([[f1], [f2]])
+f2 = (x1**3) - (x2**3)
+F = sp.Matrix([[f1], [f2]])
 
-f1 = 2*x**2 - z
-f2 = 1 + (y**2)*x
-f3 = x**2 + z**2 - 1
-F = sp.Matrix([[f1], [f2], [f3]])
-start_vec = [1, 1, 0]
+#f1 = 2*x**2 - z
+#f2 = 1 + (y**2)*x
+#f3 = x**2 + z**2 - 1
+#F = sp.Matrix([[f1], [f2], [f3]])
+#start_vec = [1, 1, 0]
+
 
 
 
 # define the number of iterations the newton_method should do
-number_of_iterations = 1
+nmber_of_iterations = 1
 
-# define the start_vec of the interation
-#start_vec = [1, 1]
+define the start_vec of the interation
+strt_vec = [1, 1]
 
 
 # bsp: x**2 = 0
 # start: x0 = 1
-x1 = sp.symbols("x1")
+#x1 = sp.symbols("x1")
 #xis = [x1]
 #f1 = x1**2
 #F = sp.Matrix([[f1]])
@@ -162,8 +163,6 @@ x1 = sp.symbols("x1")
 phi = newton_method(F, xis, start_vec)
 if phi != None:
     ite = newton_method_iteration(phi, xis, number_of_iterations, start_vec)
-
-
 
 
 

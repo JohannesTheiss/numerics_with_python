@@ -26,48 +26,102 @@ def get_weights(m):
     return np.array(w, dtype=dt)
 
 
-def NCQF(func, a, b, m):
-    x = sp.symbols("x")
+def NCQF(func, I, a, b, mi):
+    print("================================================")
     h = b - a # length of the interval
-    for mi in m:
-        print("__________________")
-        weights = get_weights(mi)
+    util.print_heading(f"NCQF: ({sp.nsimplify(a)}, {sp.nsimplify(b)}) h = {sp.nsimplify(h)}")
+    x = sp.symbols("x")
+    weights = get_weights(mi)
 
-        xi = [] # grid points
-        print(f"m = {mi}")
-        if mi == 0:
-            xk = a+(h/2)
-            print(f"x{0} = a + (h / 2) = {a} + ({h} / 2) = {xk} = {sp.nsimplify(xk)}")
-            xi.append(xk)
-        else:
-            for i in range(mi+1):
-                xk = a+((i*h)/mi)
-                print(f"x{i} = a + (i * h / m{mi}) = {a} + ({i} * {h} / {mi}) = {xk} = {sp.nsimplify(xk)}")
-                xi.append(xk)
-
-        Im = 0
-        print("SUM:")
+    xi = [] # grid points
+    print(f"m = {mi}")
+    if mi == 0:
+        xk = a+(h/2)
+        print(f"x{0} = a + (h / 2) = {a} + ({h} / 2) = {xk} = {sp.nsimplify(xk)}")
+        xi.append(xk)
+    else:
         for i in range(mi+1):
-            func_xi = func.subs(x, xi[i])
-            next_value = (h * weights[i] * func_xi)
-            Im += next_value
-            print(f"h * {sp.nsimplify(weights[i])} * {func}")
-            print(f"=> {h} * {sp.nsimplify(weights[i])} * {sp.nsimplify(func_xi)} = {next_value} = {sp.nsimplify(next_value)}\n")
+            xk = a+((i*h)/mi)
+            print(f"x{i} = a + (i * h / m{mi}) = {a} + ({i} * {h} / {mi}) = {xk} = {sp.nsimplify(xk)}")
+            xi.append(xk)
+
+    Im = 0
+    print("SUM:")
+    for i in range(mi+1):
+        func_xi = func.subs(x, xi[i])
+        next_value = (h * weights[i] * func_xi)
+        Im += next_value
+        print(f"h * {sp.nsimplify(weights[i])} * {func}")
+        print(f"=> {h} * {sp.nsimplify(weights[i])} * {sp.nsimplify(func_xi)} = {next_value} = {sp.nsimplify(next_value)}\n")
 
 
-        print(f"I_{mi}")
-        print(f"{Im} = {sp.nsimplify(Im)}")
+    # print Im
+    print(f"I_{mi} =")
+    print(f"{Im} = {sp.nsimplify(Im)}")
+
+    # print error
+    error = abs(float(I) - Im)
+    print(f"|Im - I(f)| = {error}")
+    #print(f"Em = |c| * h^P = {abs(I - Im)}")
+
+    return (Im, error)
+
+
+def SNCQF(func, I, a, b, m, N):
+    etha = (b - a) / N
+    sum_Im = []
+    for k in range(1, N+1):
+        inter_start = a + ((k-1) * etha)
+        inter_end = a + (k * etha)
+        #print(pi_start, pi_end)
+        Im, error = NCQF(func, I, inter_start, inter_end, m)
+
+        sum_Im.append(Im)
+
+    print("=======================================")
+    util.print_heading("Summed up NCQF:")
+    s = 0
+    for i in sum_Im:
+        print(f"{sp.nsimplify(i)}", end=" + ")
+        s += i
+
+    print(f"\n=> {s} = {sp.nsimplify(s)}")
 
 
 
+### Interval
+a = 0 # start
+b = 1 # end
+mi = [0, 1, 2, 3, 4]
+m = 0
+
+# number of partial intervals
+N = 2
+
+
+### function
 x = sp.symbols("x")
 func = 1/(1+x)
-a = 0
-b = 1
-m = [0, 1, 2, 3, 4]
+#func = (x**3) - x
 
-res = NCQF(func, a, b, m)
-print(f"res: {res}")
+# integrated function
+I = sp.integrate(func, (x, a, b))
+I_value = float(I)
+
+
+# print functions
+print("f(x):")
+sp.pprint(func)
+print("I:")
+sp.pprint(I)
+print(f"= {I_value}")
+
+
+for i in mi:
+    NCQF(func, I, a, b, i)
+
+#SNCQF(func, I, a, b, m, N)
+
 
 
 
