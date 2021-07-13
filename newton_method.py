@@ -22,6 +22,7 @@ def newton_method(F, xis, start_vec):
     print("####### NEWTON METHOD ####### ")
     print("F(x):")
     sp.pprint(F)
+    print_with_start_vec(F, xis, start_vec)
 
     # culc. F'
     Fd1 = sp.Matrix()
@@ -39,34 +40,83 @@ def newton_method(F, xis, start_vec):
 
     # if Fd1 is n x n
     if shape[0] == shape[1]:
-        print(DELIMITER)
-        print("culc with: d^(k) = -[F'(x^(k))]^-1 * F(x^(x))")
-        # culc det()
-        det = Fd1.det()
-        print("det(F'(x)) = ")
-        sp.pprint(det)
-        print_with_start_vec(det, xis, start_vec)
-
-        print()
-        if det != 0:
-            # culc F'.inv
-            Fd1_inv = Fd1.inv()
-            print("[F'(x^(k))]^-1 = F'.inv")
-            sp.pprint(Fd1_inv)
-            print_with_start_vec(Fd1_inv, xis, start_vec)
-
+        if shape[0] <= 2:
             print(DELIMITER)
-            # culc d
-            print("d = ")
-            d = (Fd1_inv * F)
-            sp.pprint(d)
-            d = sp.simplify(d)
-            print("=")
+            print("culc with: d^(k) = -[F'(x^(k))]^-1 * F(x^(x))")
+            # culc det()
+            det = Fd1.det()
+            print("det(F'(x)) = ")
+            sp.pprint(det)
+            print_with_start_vec(det, xis, start_vec)
+
+            print()
+            if det != 0:
+                # culc F'.inv
+                Fd1_inv = Fd1.inv()
+                print("[F'(x^(k))]^-1 = F'.inv")
+                sp.pprint(Fd1_inv)
+                print_with_start_vec(Fd1_inv, xis, start_vec)
+
+                print(DELIMITER)
+                # culc d
+                print("d = ")
+                d = (Fd1_inv * F)
+                sp.pprint(d)
+                d = sp.simplify(d)
+                print("=")
+                sp.pprint(d)
+                print_with_start_vec(d, xis, start_vec)
+
+                # culc φ 
+                phi = sp.Matrix(xis) - d
+                print("\n", sp.pretty(sp.symbols("phi")), " = ")
+                sp.pprint(phi)
+                phi = sp.simplify(phi)
+                print("=")
+                sp.pprint(phi)
+                print_with_start_vec(d, xis, start_vec)
+
+                return phi
+
+            else:
+                print("ERROR: newton_method.py: F'(x^(k)) is singular <=> det(F'(x^(k))) = 0")
+                return None
+        else:
+            # culc with 3x3
+            print(DELIMITER)
+            print("culc with:  = [F'(x^(k))] * d^(k) = -F(x^(x))  ---> LGS")
+
+            # culc. F'(x^(0)) and
+            # culc. -F(x^(0))
+            #Fd1x0 = Fd1
+            #mFx0 = F
+            #for i in range(len(xis)):
+                #Fd1x0 = Fd1x0.subs(xis[i], start_vec[i])
+                #mFx0 = mFx0.subs(xis[i], start_vec[i])
+
+            #mFx0 = -mFx0
+
+            #print(f"F'({start_vec})")
+            #sp.pprint(Fd1x0)
+
+            #print(f"-F({start_vec})")
+            #sp.pprint(mFx0)
+
+            #d1, d2, d3 = sp.symbols("d1, d2, d3")
+            #solved_lgs = sp.linsolve([Fd1x0, mFx0], (d1, d2, d3))
+            #d = sp.Matrix([list(solved_lgs)[0]]).T
+
+            solved_lgs = sp.linsolve([Fd1, -F])
+            sp.pprint(solved_lgs)
+            d = sp.Matrix([list(solved_lgs)[0]]).T
+
+            print(f"d = ")
             sp.pprint(d)
             print_with_start_vec(d, xis, start_vec)
 
+
             # culc φ 
-            phi = sp.Matrix(xis) - d
+            phi = sp.Matrix(xis) + d
             print("\n", sp.pretty(sp.symbols("phi")), " = ")
             sp.pprint(phi)
             phi = sp.simplify(phi)
@@ -75,10 +125,6 @@ def newton_method(F, xis, start_vec):
             print_with_start_vec(d, xis, start_vec)
 
             return phi
-
-        else:
-            print("ERROR: newton_method.py: F'(x^(k)) is singular <=> det(F'(x^(k))) = 0")
-            return None
 
     else:
         return None
@@ -120,7 +166,7 @@ def newton_method_iteration(phi, xis, number_of_iterations, start_vec_inter):
 dt = np.dtype('f8')
 
 # define variables and the order of derivation
-xis =[x1, x2] = sp.symbols("x1, x2")
+#xis =[x1, x2] = sp.symbols("x1, x2")
 #xis =[x, y, z] = sp.symbols("x, y, z")
 
 # define Function
@@ -130,25 +176,25 @@ xis =[x1, x2] = sp.symbols("x1, x2")
 # ⎢    3     3  ⎥
 # ⎣  x₁  - x₂   ⎦
 # line 1
-f1 = (x1**3) + (x2**3) - 4
+#f1 = (x1**3) + (x2**3) - 4
 # line 2
-f2 = (x1**3) - (x2**3)
-F = sp.Matrix([[f1], [f2]])
+#f2 = (x1**3) - (x2**3)
+#F = sp.Matrix([[f1], [f2]])
 
-#f1 = 2*x**2 - z
-#f2 = 1 + (y**2)*x
-#f3 = x**2 + z**2 - 1
-#F = sp.Matrix([[f1], [f2], [f3]])
-#start_vec = [1, 1, 0]
-
+xis =[x, y, z] = sp.symbols("x, y, z")
+f1 = 2*x**2 - z
+f2 = 1 + (y**2)*x
+f3 = x**2 + z**2 - 1
+F = sp.Matrix([[f1], [f2], [f3]])
+start_vec = [1, 1, 0]
 
 
 
 # define the number of iterations the newton_method should do
-nmber_of_iterations = 1
+number_of_iterations = 1
 
-define the start_vec of the interation
-strt_vec = [1, 1]
+#define the start_vec of the interation
+#strt_vec = [1, 1]
 
 
 # bsp: x**2 = 0
