@@ -1,5 +1,6 @@
 import numpy as np
 import sympy as sp
+import math
 
 import util
 
@@ -91,18 +92,18 @@ def SNCQF(func, I, a, b, m, N):
 
 ### Interval
 a = 0 # start
-b = 2 # end
+b = sp.pi # end
 mi = [0, 1, 2, 3, 4]
 m = 2
 
 # number of partial intervals
-N = 3
+#N = 3
 
 
 ### function
 x = sp.symbols("x")
 #func = 1/(1+x)
-func = (x**3) - x
+func = sp.sin(x)
 
 # integrated function
 I = sp.integrate(func, (x, a, b))
@@ -118,8 +119,10 @@ print(f"= {I_value}")
 
 
 #for i in mi:
-    #NCQF(func, I, a, b, i)
+#    NCQF(func, I, a, b, i)
 
-SNCQF(func, I, a, b, m, N)
+NCQF(func, I, a, b, m)
+
+#SNCQF(func, I, a, b, m, N)
 
 

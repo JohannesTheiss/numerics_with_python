@@ -152,6 +152,8 @@ def newton_method_iteration(phi, xis, number_of_iterations, start_vec_inter):
 
         print(f"\nx^({iteration+1}) = φ(x^({iteration}))")
         sp.pprint(curr_phi)
+        print("=")
+        sp.pprint(sp.nsimplify(curr_phi[0]))
         iteration_steps.append(curr_phi)
 
     #else:
@@ -181,17 +183,41 @@ dt = np.dtype('f8')
 #f2 = (x1**3) - (x2**3)
 #F = sp.Matrix([[f1], [f2]])
 
-xis =[x, y, z] = sp.symbols("x, y, z")
-f1 = 2*x**2 - z
-f2 = 1 + (y**2)*x
-f3 = x**2 + z**2 - 1
-F = sp.Matrix([[f1], [f2], [f3]])
-start_vec = [1, 1, 0]
+#xis =[x, y, z] = sp.symbols("x, y, z")
+#f1 = 2*x**2 - z
+#f2 = 1 + (y**2)*x
+#f3 = x**2 + z**2 - 1
+#F = sp.Matrix([[f1], [f2], [f3]])
+#start_vec = [1, 1, 0]
+#number_of_iterations = 1
 
 
+#x = sp.symbols("x")
+#xis = [x]
+#f1 = x**2
+#F = sp.Matrix([f1])
+#start_vec = [0.5]
+#number_of_iterations = 2
+
+
+#x1, x2 = sp.symbols("x1, x2")
+#xis = [x1, x2]
+#f1 = x1*x2 - 2*(x1**3)
+#f2 = x1 - (3/4) - (x2**2)
+#F = sp.Matrix([[f1], [f2]])
+#start_vec = [0.5, 1]
+#number_of_iterations = 1
+
+
+x = sp.symbols("x")
+xis = [x]
+f1 = x**3 - (2*x) + 6
+F = sp.Matrix([f1])
+start_vec = [2]
+number_of_iterations = 1
 
 # define the number of iterations the newton_method should do
-number_of_iterations = 1
+#number_of_iterations = 1
 
 #define the start_vec of the interation
 #strt_vec = [1, 1]

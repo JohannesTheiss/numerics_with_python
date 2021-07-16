@@ -32,7 +32,7 @@ spline_types = [cubsp.SPLINE_TYPE.natural]
 # LMS settings
 LMS = False # orAusgleichsfunktionen LAP
 # poly_degree=2 => φ_1(x)=1, φ_2(x)=x^1
-poly_degree = 1 # or k
+poly_degree = 2 # or k
 
 
 # NUMPY SETTINGS
@@ -43,12 +43,21 @@ dt = np.dtype('f8')
 ################### INPUTS ################### 
 # Auswertungspunkte
 #X = np.arange(-10, 10)
-X = np.array([2])
+X = np.array([0])
 x = X[0]
 
 # i |   0   1  2    3
 #lx1 = [-2, -1, 1,   3] # Stuetzstellen
-##lf1 = [ 8,  0, 2, -12] # Stuetzwerte
+
+#lx1 = [-2, -1, 1, 2] # Stuetzstellen
+#lf1 = [2, 3, 5, 54] # Stuetzwerte
+
+#lx1 = [-1, 0, 1, 2, 3] # Stuetzstellen
+#lf1 = [0, 0, 4, 2, 4] # Stuetzwerte
+
+lx1 = [-1, 0, 2] # Stuetzstellen
+lf1 = [0, 2, 2] # Stuetzwerte
+
 
 #lx1 = [-1, 0, 1, 3] # Stuetzstellen
 #lf1 = [0, -1, -2, 20] # Stuetzwerte
@@ -101,8 +110,8 @@ lf4 = f(lx4) # Stuetzwerte
 
 #xi = np.linspace(-1, 1, 3, dtype=dt)
 # define x and f(x) data
-xi = np.array(lx4, dtype=dt)
-fi = np.array(lf4, dtype=dt)
+xi = np.array(lx1, dtype=dt)
+fi = np.array(lf1, dtype=dt)
 
 # functions to plot
 funcs = [pf.PlotFunc(xi, fi, pf.LINE_TYPE.line, color="red", name="input_func")]
@@ -182,6 +191,7 @@ if SPLINE:
 
 
 if LMS:
+
     #lms = equalizing.lms(xi, lf11, poly_degree)
     lms = equalizing.lms(xi, fi, poly_degree)
     start = xi[0]
