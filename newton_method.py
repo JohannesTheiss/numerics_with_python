@@ -192,29 +192,14 @@ dt = np.dtype('f8')
 #number_of_iterations = 1
 
 
-#x = sp.symbols("x")
-#xis = [x]
-#f1 = x**2
-#F = sp.Matrix([f1])
-#start_vec = [0.5]
-#number_of_iterations = 2
-
-
-#x1, x2 = sp.symbols("x1, x2")
-#xis = [x1, x2]
-#f1 = x1*x2 - 2*(x1**3)
-#f2 = x1 - (3/4) - (x2**2)
-#F = sp.Matrix([[f1], [f2]])
-#start_vec = [0.5, 1]
-#number_of_iterations = 1
-
-
 x = sp.symbols("x")
 xis = [x]
-f1 = x**3 - (2*x) + 6
+f1 = x**2
 F = sp.Matrix([f1])
-start_vec = [2]
-number_of_iterations = 1
+start_vec = [0.5]
+number_of_iterations = 2
+
+
 
 # define the number of iterations the newton_method should do
 #number_of_iterations = 1
