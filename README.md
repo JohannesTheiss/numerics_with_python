@@ -1,6 +1,9 @@
 # Numerics with Python
 Numerics with calculation way
 
+![cool-figure](https://raw.githubusercontent.com/JohannesTheiss/numerics_with_python/main/screenshots/cool_graph.png)
+---
+
 ## Interpolation
 #### Input data
 | i  | xi | fi |
@@ -12,11 +15,10 @@ Numerics with calculation way
 
 evaluation point: 0
 
----
-#### Plot: Lagrange, Neville and Newton
+### Plot: Lagrange, Neville and Newton
 ![cool-figure](https://raw.githubusercontent.com/JohannesTheiss/numerics_with_python/main/screenshots/Lagrange_neville_newton.png)
 
-#### Lagrange output
+### Lagrange output
 ```
 p(x):
                  3          2
@@ -24,10 +26,9 @@ p(x):
 coef:
 [-5/6 = -0.833333333333333 = -0.83333333, 3/2 = 1.50000000000000 = 1.5, 1/3 = 0.333333333333333 = 0.33333333, 1 = 1.00000000000000 = 1.0]
 p(0)    : 1.0
-
 ```
 
-#### Neville output
+### Neville output
 ```
 P 0,1 = (0 - -1.0) * 1.0  - (0 - 0.0)* 3.0 / (0.0 - -1.0)   = 1.0 = 1.0 = 1
 P 1,2 = (0 - 0.0)  * 2.0  - (0 - 1.0)* 1.0 / (1.0 - 0.0)    = 1.0 = 1.0 = 1
@@ -38,7 +39,7 @@ P 0,3 = (0 - -1.0) * 1.0  - (0 - 2.0)* 1.0 / (2.0 - -1.0)   = 1.0 = 1.0 = 1
 P 0,3 = p(0) = 1.0
 ```
 
-#### Newton output
+### Newton output
 ```
 P 0,1 =  1.0 - 3.0              / (0.0 - -1.0)   = -2.0 = -2.0 = -2
 P 1,2 =  2.0 - 1.0              / (1.0 - 0.0)    = 1.0 = 1.0 = 1
@@ -62,12 +63,12 @@ newton poly:
           ⎝  ⎝ 6    3⎠    ⎠
 ```
 
-#### Cubic spline
-###### Plot: natural and complete spline
+### Cubic spline
+##### Plot: natural and complete spline
 ---
 ![cool-figure](https://raw.githubusercontent.com/JohannesTheiss/numerics_with_python/main/screenshots/cubic_natural_complete.png)
 ---
-###### natural spline output
+##### natural spline output
 ```
 Interval: [(-1.0, 0.0), (0.0, 1.0), (1.0, 2.0)]
 Si:
@@ -182,7 +183,7 @@ S3: interval: (1.0, 2.0)
 
 ```
 
-###### complete spline output
+##### complete spline output
 ```
 Interval: [(-1.0, 0.0), (0.0, 1.0), (1.0, 2.0)]
 Si:
@@ -296,12 +297,15 @@ S3: interval: (1.0, 2.0)
 ───── - ───── + ───── - ──
   15      3       15    15
 ```
-###### periodic spline plot
+##### periodic spline plot
 ![cool-figure](https://raw.githubusercontent.com/JohannesTheiss/numerics_with_python/main/screenshots/cubic_periodic.png)
-###### periodic spline output
-Input data:
-x: [1, 0, 1]
-y: |x|
+##### periodic spline output
+###### Input data (f(x) = |x|):
+| i  | xi | fi |
+| -- | -- | -- |
+| 0  | -1 |  1 |
+| 1  |  0 |  0 |
+| 2  |  1 |  1 |
 
 ```
 Interval: [(-1.0, 0.0), (0.0, 1.0)]
@@ -379,7 +383,3 @@ x ⋅(3.0 - 2.0⋅x)
  2
 x ⋅(3 - 2⋅x)
 ```
-
-
-### cool Graph
-![cool-figure](https://raw.githubusercontent.com/JohannesTheiss/numerics_with_python/main/screenshots/cool_graph.png)
