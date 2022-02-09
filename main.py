@@ -16,21 +16,19 @@ import lms as equalizing
 
 
 ################## SETTINGS ################### 
-PLOTTING = False
+PLOTTING = True
 
-LAGRAGE = False
-NEVILLE = False
-NEWTON = False
+LAGRAGE = True
+NEVILLE = True
+NEWTON = True
 
 # spline settings
 SPLINE = True
-spline_types = [cubsp.SPLINE_TYPE.natural]
-#spline_types = [cubsp.SPLINE_TYPE.complete]
-#spline_types = [cubsp.SPLINE_TYPE.natural, \
-#                cubsp.SPLINE_TYPE.complete, cubsp.SPLINE_TYPE.periodic]
+spline_types = [cubsp.SPLINE_TYPE.natural, \
+                cubsp.SPLINE_TYPE.complete, cubsp.SPLINE_TYPE.periodic]
 
 # LMS settings
-LMS = False # orAusgleichsfunktionen LAP
+LMS = False # or balancing functions LAP
 # poly_degree=2 => φ_1(x)=1, φ_2(x)=x^1
 poly_degree = 2 # or k
 
@@ -41,48 +39,19 @@ dt = np.dtype('f8')
 
 
 ################### INPUTS ################### 
-# Auswertungspunkte
+# evaluation points 
 #X = np.arange(-10, 10)
 X = np.array([0])
 x = X[0]
 
-# i |   0   1  2    3
-#lx1 = [-2, -1, 1,   3] # Stuetzstellen
+#lx1 = [-1, 0, 1, 2] # starting points
+#lf1 = [ 3, 1, 2, 1] # starting values
 
-#lx1 = [-2, -1, 1, 2] # Stuetzstellen
-#lf1 = [2, 3, 5, 54] # Stuetzwerte
-
-#lx1 = [-1, 0, 1, 2, 3] # Stuetzstellen
-#lf1 = [0, 0, 4, 2, 4] # Stuetzwerte
-
-lx1 = [-1, 0, 2] # Stuetzstellen
-lf1 = [0, 2, 2] # Stuetzwerte
+lx1 = [-4, -3, -1,  0, 2, 4, 6] # starting points
+lf1 = [ 3,  0, -1, -1, 1, 2, 4] # starting values
 
 
-#lx1 = [-1, 0, 1, 3] # Stuetzstellen
-#lf1 = [0, -1, -2, 20] # Stuetzwerte
-
-#lx1 = [-1, 0, 1, 2] # Stuetzstellen
-#lf1 = [3/10, 1/10, 0, 0] # Stuetzwerte
-#f1, f2 = sp.symbols("f1, f2")
-#lf11 = [3/10, 1/10, f1, f2] # Stuetzwerte
-
-#lx1 = np.array([(-3 + i) for i in range(0, 7)], dtype=dt)
-#f1 = lambda xk : np.abs(xk)
-#lf1 = f1(lx1)
-
-#lx1 = [-1, 0, 1, 3] # Stuetzstellen
-#lf1 = [0, -1, -2, 20] # Stuetzwerte
-
-#lx1 = [-2, -1, 1, 3] # Stuetzstellen
-#lf1 = [8, 0, 2, -12] # Stuetzwerte
-
-lx2 = [-2, -1, 1,   3, 0]
-lf2 = [ 8,  0, 2, -12, 1]
-
-lx3 = [-2, -0.5, 0.5, 1, 1.5]
-lf3 = [-4,  0.5, 3.5, 5, 6.5]
-
+# only needed for the SPLINE_TYPE.periodic
 # if you want to define your own function
 # define x values
 lx4 = np.array([-1, 0, 1], dtype=dt)
@@ -90,28 +59,13 @@ f = lambda x : abs(x)       # f(x) = |x|
 fd1 = lambda x : x/abs(x)   # f'(x) = x/|x|
 lf4 = f(lx4) # Stuetzwerte
 
-#lx4 = np.array([-18, -16, -10, -5, -1, 0, 1, 4, 8, 12, 16], dtype=dt)
-#lx4 = np.linspace(-10, 10, 20, dtype=dt)
-#f = lambda x : (((x**3)+4)/math.pi)*(x**2)
-#fd1 = lambda x : (5*(x**4)+(8*x))/math.pi
-#f = lambda x : x**3
-#fd1 = lambda x : 2*x**2
-#lf4 = f(lx4) # Stuetzwerte
 
 
-# TODO build symolic function
-#func_x = sp.symbols("x")
-#sym_func = sp.Abs(func_x) # f(x) = |x|
-#f = lambda x : abs(x) # f(x) = |x|
-# convert the symolic function to a lambda
-#lam_func = sp.lambdify(func_x, sym_func, "numpy")
-#lf4 = lam_func(lx4) # Stuetzwerte
-
-
-#xi = np.linspace(-1, 1, 3, dtype=dt)
 # define x and f(x) data
 xi = np.array(lx1, dtype=dt)
 fi = np.array(lf1, dtype=dt)
+#xi = np.array(lx4, dtype=dt)
+#fi = np.array(lf4, dtype=dt)
 
 # functions to plot
 funcs = [pf.PlotFunc(xi, fi, pf.LINE_TYPE.line, color="red", name="input_func")]
@@ -131,6 +85,7 @@ if LAGRAGE:
     if lagr_Y.size != 0:
         funcs.append(pf.PlotFunc(new_X, lagr_Y, name="lagrange_poly"))
     if lagr_values != None:
+        # if you want to plot the lagrange value
         #funcs.append(pf.PlotFunc(X, lagr_values, name="lagrange_values"))
         pass
 
@@ -140,7 +95,7 @@ if NEVILLE:
     neville_value = nevi.neville(xi, fi, x)
 
     if neville_value != None:
-        #funcs.append(pf.PlotFunc(x, neville_value, name="neville_value"))
+        funcs.append(pf.PlotFunc(x, neville_value, name="neville_value"))
         pass
 
 # NEWTON call
